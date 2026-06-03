@@ -1,0 +1,146 @@
+[2026-06-03 19:54:54.046] [WARN] - Removed duplicate CSS rule: Internal style block [index=2]
+[2026-06-03 19:54:54.057] [WARN] - Removed duplicate CSS rule: Inline style rule [selector=.box]
+[2026-06-03 19:54:54.067] [WARN] - Removed duplicate JS block: Internal script block [index=2]
+[2026-06-03 19:54:54.075] [WARN] - Removed duplicate JS block: Imported script [src=common.js]
+[2026-06-03 19:54:54.076] [WARN] - Removed duplicate JS block: Event listener [selector=.btn, event=click]
+[2026-06-03 19:54:54.242] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 19:54:54.246] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 19:54:54.272] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 19:54:54.278] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 19:54:54.305] [UPDATE] - CSS file updated at test_home10937687579642323125.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 19:54:54.311] [UPDATE] - CSS file updated at test_home10937687579642323125.css: New Styles Added : 1, Duplicate Styles Skipped : 1
+[2026-06-03 19:54:54.333] [UPDATE] - JS file updated at test_home16702979842510832811.js: New Scripts Added : 1, Duplicate Scripts Skipped : 0
+[2026-06-03 19:54:54.339] [UPDATE] - JS file updated at test_home16702979842510832811.js: New Scripts Added : 1, Duplicate Scripts Skipped : 1
+[2026-06-03 19:55:40.794] [WARN] - Removed duplicate CSS rule: Internal style block [index=2]
+[2026-06-03 19:55:40.796] [WARN] - Removed duplicate CSS rule: Inline style rule [selector=.box]
+[2026-06-03 19:55:40.819] [WARN] - Removed duplicate JS block: Internal script block [index=2]
+[2026-06-03 19:55:40.820] [WARN] - Removed duplicate JS block: Imported script [src=common.js]
+[2026-06-03 19:55:40.820] [WARN] - Removed duplicate JS block: Event listener [selector=.btn, event=click]
+[2026-06-03 19:55:40.979] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 19:55:40.979] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 19:55:41.002] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 19:55:41.005] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 19:55:41.029] [UPDATE] - CSS file updated at test_home7513270115127874417.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 19:55:41.033] [UPDATE] - CSS file updated at test_home7513270115127874417.css: New Styles Added : 1, Duplicate Styles Skipped : 1
+[2026-06-03 19:55:41.041] [UPDATE] - JS file updated at test_home8903055331409196985.js: New Scripts Added : 1, Duplicate Scripts Skipped : 0
+[2026-06-03 19:55:41.047] [UPDATE] - JS file updated at test_home8903055331409196985.js: New Scripts Added : 1, Duplicate Scripts Skipped : 1
+[2026-06-03 19:56:33.602] [INFO] - Application starting...
+[2026-06-03 19:57:47.929] [INFO] - User selected: New Conversion Mode
+[2026-06-03 19:59:05.273] [INFO] - Starting CSP Migration Utility in mode: NEW_CONVERSION
+[2026-06-03 20:00:11.390] [WARN] - Removed duplicate CSS rule: Internal style block [index=2]
+[2026-06-03 20:00:11.399] [WARN] - Removed duplicate CSS rule: Inline style rule [selector=.box]
+[2026-06-03 20:00:11.417] [WARN] - Removed duplicate JS block: Internal script block [index=2]
+[2026-06-03 20:00:11.420] [WARN] - Removed duplicate JS block: Imported script [src=common.js]
+[2026-06-03 20:00:11.421] [WARN] - Removed duplicate JS block: Event listener [selector=.btn, event=click]
+[2026-06-03 20:00:11.601] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 20:00:11.601] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 20:00:11.632] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 20:00:11.635] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 20:00:11.658] [UPDATE] - CSS file updated at test_home12072974240532270757.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 20:00:11.664] [UPDATE] - CSS file updated at test_home12072974240532270757.css: New Styles Added : 1, Duplicate Styles Skipped : 1
+[2026-06-03 20:00:11.665] [UPDATE] - JS file updated at test_home7029881673271247410.js: New Scripts Added : 1, Duplicate Scripts Skipped : 0
+[2026-06-03 20:00:11.677] [UPDATE] - JS file updated at test_home7029881673271247410.js: New Scripts Added : 1, Duplicate Scripts Skipped : 1
+[2026-06-03 20:00:28.972] [INFO] - Application starting...
+[2026-06-03 20:02:01.836] [INFO] - User selected: New Conversion Mode
+[2026-06-03 20:03:26.298] [INFO] - Starting CSP Migration Utility in mode: NEW_CONVERSION
+[2026-06-03 20:03:26.360] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:03:26.360] [INFO] - Entering phase: EXTERNAL_SCRIPT_PROCESSING
+[2026-06-03 20:03:26.439] [UPDATE] - JS file updated at index.js: New Scripts Added : 1, Duplicate Scripts Skipped : 0
+[2026-06-03 20:03:26.442] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:03:26.442] [INFO] - Entering phase: INTERNAL_SCRIPT_PROCESSING
+[2026-06-03 20:03:26.454] [UPDATE] - JS file updated at index.js: New Scripts Added : 1, Duplicate Scripts Skipped : 0
+[2026-06-03 20:03:26.457] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:03:26.457] [INFO] - Entering phase: INLINE_SCRIPT_PROCESSING
+[2026-06-03 20:03:26.469] [UPDATE] - JS file updated at index.js: New Scripts Added : 2, Duplicate Scripts Skipped : 0
+[2026-06-03 20:03:26.472] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:03:26.472] [INFO] - Entering phase: SCRIPT_COMPLETED
+[2026-06-03 20:04:04.853] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:04:04.854] [INFO] - Entering phase: EXTERNAL_STYLE_PROCESSING
+[2026-06-03 20:04:04.871] [UPDATE] - CSS file updated at index.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 20:04:04.874] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:04:04.875] [INFO] - Entering phase: INTERNAL_STYLE_PROCESSING
+[2026-06-03 20:04:04.882] [UPDATE] - CSS file updated at index.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 20:04:04.884] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:04:04.886] [INFO] - Entering phase: INLINE_STYLE_PROCESSING
+[2026-06-03 20:04:04.892] [UPDATE] - CSS file updated at index.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 20:04:04.897] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:04:04.897] [INFO] - Entering phase: STYLE_COMPLETED
+[2026-06-03 20:04:23.588] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:04:23.588] [INFO] - Entering phase: HTML_GENERATION
+[2026-06-03 20:04:23.599] [INFO] - Generated CSP-compliant HTML at: C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\test-site\index.html
+[2026-06-03 20:04:23.602] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:04:23.605] [INFO] - Cleared checkpoint file C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:04:23.608] [INFO] - Conversion completed successfully.
+[2026-06-03 20:08:34.221] [INFO] - Application starting...
+[2026-06-03 20:09:33.137] [INFO] - User selected: Update Existing Conversion Mode
+[2026-06-03 20:11:07.138] [INFO] - Starting CSP Migration Utility in mode: UPDATE_CONVERSION
+[2026-06-03 20:11:07.202] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:11:07.202] [INFO] - Entering phase: EXTERNAL_SCRIPT_PROCESSING
+[2026-06-03 20:11:07.310] [UPDATE] - JS file updated at index.js: New Scripts Added : 1, Duplicate Scripts Skipped : 0
+[2026-06-03 20:11:07.314] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:11:07.315] [INFO] - Entering phase: INTERNAL_SCRIPT_PROCESSING
+[2026-06-03 20:11:07.320] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:11:07.320] [INFO] - Entering phase: INLINE_SCRIPT_PROCESSING
+[2026-06-03 20:11:07.328] [UPDATE] - JS file updated at index.js: New Scripts Added : 1, Duplicate Scripts Skipped : 2
+[2026-06-03 20:11:07.341] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:11:07.341] [INFO] - Entering phase: SCRIPT_COMPLETED
+[2026-06-03 20:12:46.730] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:12:46.731] [INFO] - Entering phase: EXTERNAL_STYLE_PROCESSING
+[2026-06-03 20:12:46.742] [UPDATE] - CSS file updated at index.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 20:12:46.746] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:12:46.746] [INFO] - Entering phase: INTERNAL_STYLE_PROCESSING
+[2026-06-03 20:12:46.749] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:12:46.749] [INFO] - Entering phase: INLINE_STYLE_PROCESSING
+[2026-06-03 20:12:46.754] [UPDATE] - CSS file updated at index.css: New Styles Added : 1, Duplicate Styles Skipped : 1
+[2026-06-03 20:12:46.766] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:12:46.766] [INFO] - Entering phase: STYLE_COMPLETED
+[2026-06-03 20:13:05.227] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:13:05.227] [INFO] - Entering phase: HTML_GENERATION
+[2026-06-03 20:13:05.234] [INFO] - Generated CSP-compliant HTML at: C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\test-site\index.html
+[2026-06-03 20:13:05.237] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:13:05.239] [INFO] - Cleared checkpoint file C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:13:05.243] [INFO] - Conversion completed successfully.
+[2026-06-03 20:14:16.722] [WARN] - Removed duplicate CSS rule: Internal style block [index=2]
+[2026-06-03 20:14:16.730] [WARN] - Removed duplicate CSS rule: Inline style rule [selector=.box]
+[2026-06-03 20:14:16.746] [WARN] - Removed duplicate JS block: Internal script block [index=2]
+[2026-06-03 20:14:16.746] [WARN] - Removed duplicate JS block: Imported script [src=common.js]
+[2026-06-03 20:14:16.754] [WARN] - Removed duplicate JS block: Event listener [selector=.btn, event=click]
+[2026-06-03 20:14:16.921] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 20:14:16.927] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-03 20:14:16.951] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 20:14:16.957] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-03 20:14:16.980] [UPDATE] - CSS file updated at test_home9824775427130252930.css: New Styles Added : 1, Duplicate Styles Skipped : 0
+[2026-06-03 20:14:16.985] [UPDATE] - CSS file updated at test_home9824775427130252930.css: New Styles Added : 1, Duplicate Styles Skipped : 1
+[2026-06-03 20:14:16.994] [UPDATE] - JS file updated at test_home2004047478215485106.js: New Scripts Added : 1, Duplicate Scripts Skipped : 0
+[2026-06-03 20:14:16.999] [UPDATE] - JS file updated at test_home2004047478215485106.js: New Scripts Added : 1, Duplicate Scripts Skipped : 1
+[2026-06-03 20:16:05.288] [INFO] - Application starting...
+[2026-06-03 20:16:46.673] [INFO] - User selected: Update Existing Conversion Mode
+[2026-06-03 20:18:22.947] [INFO] - Starting CSP Migration Utility in mode: UPDATE_CONVERSION
+[2026-06-03 20:18:23.127] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:23.127] [INFO] - Entering phase: EXTERNAL_SCRIPT_PROCESSING
+[2026-06-03 20:18:23.387] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:23.387] [INFO] - Entering phase: INTERNAL_SCRIPT_PROCESSING
+[2026-06-03 20:18:23.398] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:23.398] [INFO] - Entering phase: INLINE_SCRIPT_PROCESSING
+[2026-06-03 20:18:23.446] [UPDATE] - JS file updated at index.js: New Scripts Added : 1, Duplicate Scripts Skipped : 2
+[2026-06-03 20:18:23.458] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:23.463] [INFO] - Entering phase: SCRIPT_COMPLETED
+[2026-06-03 20:18:42.922] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:42.923] [INFO] - Entering phase: EXTERNAL_STYLE_PROCESSING
+[2026-06-03 20:18:42.929] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:42.929] [INFO] - Entering phase: INTERNAL_STYLE_PROCESSING
+[2026-06-03 20:18:42.934] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:42.935] [INFO] - Entering phase: INLINE_STYLE_PROCESSING
+[2026-06-03 20:18:42.947] [UPDATE] - CSS file updated at index.css: New Styles Added : 1, Duplicate Styles Skipped : 1
+[2026-06-03 20:18:42.951] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:18:42.953] [INFO] - Entering phase: STYLE_COMPLETED
+[2026-06-03 20:19:06.223] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:19:06.223] [INFO] - Entering phase: HTML_GENERATION
+[2026-06-03 20:19:06.232] [INFO] - Generated CSP-compliant HTML at: C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\test-site\index.html
+[2026-06-03 20:19:06.235] [INFO] - Checkpoint saved at C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:19:06.236] [INFO] - Cleared checkpoint file C:\Users\user\.gemini\antigravity\scratch\csp-migration-utility\conversion_state.json
+[2026-06-03 20:19:06.238] [INFO] - Conversion completed successfully.
+[2026-06-03 20:23:07.311] [INFO] - Application starting...
+[2026-06-03 20:24:30.383] [INFO] - User selected: New Conversion Mode
+[2026-06-03 21:23:19.626] [INFO] - Application starting...
+[2026-06-03 21:23:27.609] [INFO] - User exited from mode selection screen.

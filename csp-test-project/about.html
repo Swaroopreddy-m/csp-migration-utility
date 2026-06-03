@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Traditional HTML</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap">
+    <link rel="stylesheet" href="global.css">
+    
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #111119;
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #1e1e2f;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            margin-top: 0;
+            color: #7f00ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>About Antigravity Utility</h2>
+        <p>This utility helps automate the extraction of inline and internal assets to comply with Content Security Policies.</p>
+        
+        <!-- Element with inline event and styling (Priority 3) -->
+        <p style="border-left: 4px solid #ff007f; padding-left: 15px; color: #ff007f; font-weight: 600; cursor: pointer;" 
+           onclick="toggleSecretMessage();">
+            Click here to reveal a secret message!
+        </p>
+        
+        <div id="secret-box" style="display: none; background: rgba(255, 0, 127, 0.1); padding: 10px; margin-bottom: 20px; border-radius: 5px;">
+            CSP prevents execution of unsafe inline scripts. This tool fixes that!
+        </div>
+
+        <!-- Priority 2: Selector should be #back-btn -->
+        <button id="back-btn" 
+                style="background: #7f00ff; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer;" 
+                onclick="window.location.href='index.html';">
+            Go Back Home
+        </button>
+    </div>
+
+    <script src="global.js"></script>
+    <script>
+        function toggleSecretMessage() {
+            var box = document.getElementById('secret-box');
+            if (box.style.display === 'none') {
+                box.style.display = 'block';
+            } else {
+                box.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

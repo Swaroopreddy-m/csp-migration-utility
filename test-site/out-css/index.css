@@ -1,0 +1,79 @@
+/* csp_block_start:type=IMPORTED;name=global.css */
+/* Global CSS rules for verification */
+a {
+    color: #ff007f;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #7f00ff;
+}
+
+button:focus {
+    outline: none;
+}
+/* csp_block_end:type=IMPORTED;name=global.css */
+
+/* csp_block_start:type=INTERNAL;index=1 */
+body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #111119);
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff007f, #7f00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-container {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+/* csp_block_end:type=INTERNAL;index=1 */
+
+/* csp_block_start:type=INLINE;selector=.csp_auto_0003 */
+.csp_auto_0003 {
+    color: #b0b0b0; font-size: 1.1rem; line-height: 1.6;
+}
+/* csp_block_end:type=INLINE;selector=.csp_auto_0003 */
+
+/* csp_block_start:type=INLINE;selector=.csp_auto_0002 */
+.csp_auto_0002 {
+    margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 10px;
+}
+/* csp_block_end:type=INLINE;selector=.csp_auto_0002 */
+
+/* csp_block_start:type=INLINE;selector=.btn-primary */
+.btn-primary {
+    background: #ff007f; color: white; border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+}
+/* csp_block_end:type=INLINE;selector=.btn-primary */
+
+/* csp_block_start:type=INLINE;selector=#btn-secondary */
+#btn-secondary {
+    background: transparent; color: #7f00ff; border: 2px solid #7f00ff; padding: 10px 22px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+/* csp_block_end:type=INLINE;selector=#btn-secondary */
+

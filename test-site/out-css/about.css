@@ -1,0 +1,61 @@
+/* csp_block_start:type=IMPORTED;name=global.css */
+/* Global CSS rules for verification */
+a {
+    color: #ff007f;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #7f00ff;
+}
+
+button:focus {
+    outline: none;
+}
+/* csp_block_end:type=IMPORTED;name=global.css */
+
+/* csp_block_start:type=INTERNAL;index=1 */
+body {
+            font-family: 'Outfit', sans-serif;
+            background: #111119;
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #1e1e2f;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            margin-top: 0;
+            color: #7f00ff;
+        }
+/* csp_block_end:type=INTERNAL;index=1 */
+
+/* csp_block_start:type=INLINE;selector=.csp_auto_0001 */
+.csp_auto_0001 {
+    border-left: 4px solid #ff007f; padding-left: 15px; color: #ff007f; font-weight: 600; cursor: pointer;
+}
+/* csp_block_end:type=INLINE;selector=.csp_auto_0001 */
+
+/* csp_block_start:type=INLINE;selector=#secret-box */
+#secret-box {
+    display: none; background: rgba(255, 0, 127, 0.1); padding: 10px; margin-bottom: 20px; border-radius: 5px;
+}
+/* csp_block_end:type=INLINE;selector=#secret-box */
+
+/* csp_block_start:type=INLINE;selector=#back-btn */
+#back-btn {
+    background: #7f00ff; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer;
+}
+/* csp_block_end:type=INLINE;selector=#back-btn */
+

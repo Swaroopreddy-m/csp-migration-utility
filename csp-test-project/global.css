@@ -1,0 +1,14 @@
+/* Global CSS rules for verification */
+a {
+    color: #ff007f;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #7f00ff;
+}
+
+button:focus {
+    outline: none;
+}
