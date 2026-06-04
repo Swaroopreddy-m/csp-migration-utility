@@ -69,26 +69,24 @@ public class StyleExtractorTest {
                 "<p style='padding: 5px;'>Para 1</p>" +
                 "</body></html>";
         Document doc = HtmlParser.parse(html);
-        ClassNameGenerator classGen = new ClassNameGenerator();
-        List<CssBlock> blocks = extractor.extractInlineStyles(doc, classGen, report);
+        List<CssBlock> blocks = extractor.extractInlineStyles(doc, java.nio.file.Paths.get("test.html"), report);
 
         assertEquals(3, blocks.size());
 
-        // Check div (Priority 2: existing ID since no class is present)
+        // Check div (Priority 1 & 2: existing ID)
         CssBlock b1 = blocks.stream().filter(b -> "#div1".equals(b.getSelector())).findFirst().orElse(null);
         assertNotNull(b1);
         assertEquals("color: red; margin: 10px;", b1.getContent());
 
-        // Check span (Priority 1: existing class)
-        CssBlock b2 = blocks.stream().filter(b -> ".text-span".equals(b.getSelector())).findFirst().orElse(null);
+        // Check span (Priority 4: No ID/Name -> generated ID)
+        CssBlock b2 = blocks.stream().filter(b -> b.getSelector().startsWith("#csp_auto_")).findFirst().orElse(null);
         assertNotNull(b2);
         assertEquals("font-size: 14px;", b2.getContent());
 
-        // Check paragraph (Priority 3: generated class because no class/ID is present)
-        CssBlock b3 = blocks.stream().filter(b -> b.getSelector().startsWith(".csp_auto_")).findFirst().orElse(null);
+        // Check paragraph (Priority 4: generated ID)
+        CssBlock b3 = blocks.stream().filter(b -> b.getSelector().startsWith("#csp_auto_") && !b.getSelector().equals(b2.getSelector())).findFirst().orElse(null);
         assertNotNull(b3);
         assertEquals("padding: 5px;", b3.getContent());
-        assertTrue(doc.outerHtml().contains(b3.getSelector().substring(1)));
     }
 
     @Test

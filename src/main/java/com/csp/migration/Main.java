@@ -72,13 +72,15 @@ public class Main {
         Path htmlFolder = InputManager.getAndValidateHtmlFolder();
         Path jsFolder = InputManager.getJsOutputFolder();
         Path cssFolder = InputManager.getCssOutputFolder();
+        String contextPath = InputManager.getAndValidateApplicationContextPath();
 
         // Check for partial conversions (existing files in target directories)
         List<Path> htmlFiles = discoverHtmlFiles(htmlFolder);
         boolean filesExist = RecoveryManager.detectPreExistingFiles(htmlFiles, jsFolder, cssFolder);
 
-        AppConfig config = new AppConfig(htmlFolder, jsFolder, cssFolder, "NEW_CONVERSION");
+        AppConfig config = new AppConfig(htmlFolder, jsFolder, cssFolder, "NEW_CONVERSION", contextPath);
         ConversionState state = new ConversionState();
+        state.setApplicationContextPath(contextPath);
         ConversionReport report = new ConversionReport();
 
         if (filesExist) {
@@ -120,6 +122,7 @@ public class Main {
     private static void runUpdateConversion() {
         LoggerService.info("User selected: Update Existing Conversion Mode");
         Path htmlLocation = InputManager.getAndValidateHtmlLocationForUpdate();
+        String contextPath = InputManager.getAndValidateApplicationContextPath();
 
         // Discover HTML files from input
         List<Path> htmlFiles = new ArrayList<>();
@@ -173,8 +176,9 @@ public class Main {
         // We will execute the App for each HTML file's directory
         for (Path file : filesToProcess) {
             Path parentDir = file.getParent();
-            AppConfig config = new AppConfig(file, parentDir, parentDir, "UPDATE_CONVERSION");
+            AppConfig config = new AppConfig(file, parentDir, parentDir, "UPDATE_CONVERSION", contextPath);
             ConversionState state = new ConversionState();
+            state.setApplicationContextPath(contextPath);
             executeApp(config, state, report);
         }
     }
@@ -185,7 +189,8 @@ public class Main {
                 Paths.get(state.getHtmlFolder()),
                 Paths.get(state.getJsFolder()),
                 Paths.get(state.getCssFolder()),
-                state.getMode()
+                state.getMode(),
+                state.getApplicationContextPath()
         );
         ConversionReport report = new ConversionReport();
         report.addGeneratedClasses(state.getProcessedFiles().size()); // Rough count

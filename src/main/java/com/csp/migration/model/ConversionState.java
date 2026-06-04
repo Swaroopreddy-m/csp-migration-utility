@@ -14,6 +14,8 @@ public class ConversionState {
     private List<String> generatedCssFiles = new ArrayList<>();
     private int warningsCount;
     private int errorsCount;
+    private String applicationContextPath;
+    private java.util.Map<String, String> userMappings = new java.util.HashMap<>();
 
     public ConversionState() {}
 
@@ -95,5 +97,21 @@ public class ConversionState {
 
     public void setErrorsCount(int errorsCount) {
         this.errorsCount = errorsCount;
+    }
+
+    public String getApplicationContextPath() {
+        return applicationContextPath;
+    }
+
+    public void setApplicationContextPath(String applicationContextPath) {
+        this.applicationContextPath = applicationContextPath;
+    }
+
+    public java.util.Map<String, String> getUserMappings() {
+        return userMappings;
+    }
+
+    public void setUserMappings(java.util.Map<String, String> userMappings) {
+        this.userMappings = userMappings;
     }
 }

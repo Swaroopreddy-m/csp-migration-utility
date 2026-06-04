@@ -7,14 +7,20 @@ public class AppConfig {
     private Path jsFolder;
     private Path cssFolder;
     private String mode; // "NEW_CONVERSION" or "UPDATE_CONVERSION"
+    private String applicationContextPath;
 
     public AppConfig() {}
 
     public AppConfig(Path htmlFolder, Path jsFolder, Path cssFolder, String mode) {
+        this(htmlFolder, jsFolder, cssFolder, mode, null);
+    }
+
+    public AppConfig(Path htmlFolder, Path jsFolder, Path cssFolder, String mode, String applicationContextPath) {
         this.htmlFolder = htmlFolder;
         this.jsFolder = jsFolder;
         this.cssFolder = cssFolder;
         this.mode = mode;
+        this.applicationContextPath = applicationContextPath;
     }
 
     public Path getHtmlFolder() {
@@ -47,5 +53,13 @@ public class AppConfig {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public String getApplicationContextPath() {
+        return applicationContextPath;
+    }
+
+    public void setApplicationContextPath(String applicationContextPath) {
+        this.applicationContextPath = applicationContextPath;
     }
 }

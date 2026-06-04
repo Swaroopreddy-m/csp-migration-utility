@@ -13,6 +13,7 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -152,6 +153,10 @@ public class App {
             }
             currentPhase = state.getPhase();
         }
+
+        if ("COMPLETED".equals(state.getPhase())) {
+            ReportWriter.writeReports(Paths.get("."), report);
+        }
     }
 
     private void transitionTo(String nextPhase) {
@@ -221,11 +226,10 @@ public class App {
 
     private void processExternalScripts(Path file) throws SkipFileException, ExitRequestedException, IOException {
         Document doc = HtmlParser.parse(file.toFile());
-        List<JsBlock> blocks = scriptExtractor.extractExternalScripts(doc, file, prompter, report);
-        if (!blocks.isEmpty()) {
-            Path jsFile = config.getJsFolder().resolve(RecoveryManager.getBaseName(file) + ".js");
-            UpdateManager.updateJsFile(jsFile, blocks, report);
-            addGeneratedJsFile(jsFile.getFileName().toString());
+        ResourceResolver resolver = new ResourceResolver();
+        List<ResourceResolver.ResolvedResource> jsResources = resolver.resolveJsResources(doc, file, config.getApplicationContextPath(), state, report);
+        for (ResourceResolver.ResolvedResource res : jsResources) {
+            JsRewriter.rewriteJsFile(res.getResolvedPath(), report);
         }
     }
 
@@ -279,12 +283,8 @@ public class App {
 
     private void processExternalStyles(Path file) throws SkipFileException, ExitRequestedException, IOException {
         Document doc = HtmlParser.parse(file.toFile());
-        List<CssBlock> blocks = styleExtractor.extractExternalStyles(doc, file, prompter, report);
-        if (!blocks.isEmpty()) {
-            Path cssFile = config.getCssFolder().resolve(RecoveryManager.getBaseName(file) + ".css");
-            UpdateManager.updateCssFile(cssFile, blocks, report);
-            addGeneratedCssFile(cssFile.getFileName().toString());
-        }
+        ResourceResolver resolver = new ResourceResolver();
+        resolver.resolveCssResources(doc, file, config.getApplicationContextPath(), state, report);
     }
 
     private void processInternalStyles(Path file) throws SkipFileException, ExitRequestedException, IOException {
@@ -299,16 +299,34 @@ public class App {
 
     private void processInlineStyles(Path file) throws SkipFileException, ExitRequestedException, IOException {
         Document doc = HtmlParser.parse(file.toFile());
-        ClassNameGenerator classGen = new ClassNameGenerator();
-        classGen.scanExistingClasses(doc.html());
-
-        List<CssBlock> blocks = styleExtractor.extractInlineStyles(doc, classGen, report);
+        List<CssBlock> blocks = styleExtractor.extractInlineStyles(doc, file, report);
+        
         if (!blocks.isEmpty()) {
-            Path cssFile = config.getCssFolder().resolve(RecoveryManager.getBaseName(file) + ".css");
-            UpdateManager.updateCssFile(cssFile, blocks, report);
-            addGeneratedCssFile(cssFile.getFileName().toString());
+            ResourceResolver resolver = new ResourceResolver();
+            List<ResourceResolver.ResolvedResource> cssResources = resolver.resolveCssResources(doc, file, config.getApplicationContextPath(), state, report);
+            
+            if (!cssResources.isEmpty()) {
+                for (CssBlock block : blocks) {
+                    Path targetCssFile = cssResources.get(cssResources.size() - 1).getResolvedPath();
+                    for (ResourceResolver.ResolvedResource res : cssResources) {
+                        Path path = res.getResolvedPath();
+                        if (Files.exists(path)) {
+                            String cssText = Files.readString(path);
+                            if (cssText.contains(block.getSelector() + " ") || cssText.contains(block.getSelector() + "{") || cssText.contains(block.getSelector() + "\n")) {
+                                targetCssFile = path;
+                                break;
+                            }
+                        }
+                    }
+                    CssMerger.mergeStylesIntoFile(targetCssFile, block.getSelector(), block.getContent(), report);
+                }
+            } else {
+                Path cssFile = config.getCssFolder().resolve(RecoveryManager.getBaseName(file) + ".css");
+                UpdateManager.updateCssFile(cssFile, blocks, report);
+                addGeneratedCssFile(cssFile.getFileName().toString());
+            }
 
-            // Write intermediate HTML back to disk to persist generated class names
+            // Write intermediate HTML back to disk to persist generated IDs and display changes
             FileService.writeStringTransactionally(file, doc.outerHtml());
         }
     }
@@ -341,8 +359,11 @@ public class App {
         String jsFileName = baseName + ".js";
         String cssFileName = baseName + ".css";
 
+        boolean hasGeneratedJs = state.getGeneratedJsFiles().contains(jsFileName);
+        boolean hasGeneratedCss = state.getGeneratedCssFiles().contains(cssFileName);
+
         // Call the final HTML generator to strip inline attributes/tags and insert single script/link
-        HtmlGenerator.generateCspCompliantHtml(doc, file, jsFileName, cssFileName, report);
+        HtmlGenerator.generateCspCompliantHtml(doc, file, jsFileName, cssFileName, hasGeneratedJs, hasGeneratedCss, report);
         addProcessedFile(file.getFileName().toString());
     }
 

@@ -69,6 +69,23 @@ public class InputManager {
     }
 
     /**
+     * Prompt the user upfront for the Application Context Path (optional).
+     * Used for resolving DYN_CONTEXT_PATH.
+     */
+    public static String getAndValidateApplicationContextPath() {
+        String input = readLine("Enter Application Context Path (optional, for resolving DYN_CONTEXT_PATH): ");
+        if (input.isEmpty()) {
+            return "";
+        }
+        Path path = Paths.get(input).toAbsolutePath().normalize();
+        if (!Files.exists(path) || !Files.isDirectory(path)) {
+            System.out.println("Warning: Application Context Path does not exist or is not a directory at " + path);
+            System.out.println("We will still use it for string replacement, but file resolution may fail.");
+        }
+        return path.toString();
+    }
+
+    /**
      * Validates and returns the HTML file or folder path for update mode.
      */
     public static Path getAndValidateHtmlLocationForUpdate() {

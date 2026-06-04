@@ -1,3 +1,4 @@
+com\csp\migration\service\CssMerger.class
 com\csp\migration\service\StyleExtractor.class
 com\csp\migration\service\UpdateManager$UpdateResult.class
 com\csp\migration\service\UserPrompter$Choice.class
@@ -7,9 +8,11 @@ com\csp\migration\service\DuplicateDetector.class
 com\csp\migration\service\JsGenerator.class
 com\csp\migration\App.class
 com\csp\migration\service\InputManager$1.class
+com\csp\migration\service\ResourceResolver$ResolvedResource.class
 com\csp\migration\model\CssBlock.class
 com\csp\migration\model\ConversionReport.class
 com\csp\migration\service\LoggerService.class
+com\csp\migration\service\ReportWriter.class
 com\csp\migration\service\UserPrompter.class
 com\csp\migration\service\RecoveryManager.class
 com\csp\migration\service\HtmlParser.class
@@ -24,6 +27,8 @@ com\csp\migration\service\ScriptExtractor.class
 com\csp\migration\service\ClassNameGenerator.class
 com\csp\migration\model\JsBlock.class
 com\csp\migration\service\UpdateManager.class
+com\csp\migration\service\ResourceResolver.class
+com\csp\migration\service\ResourceResolver$ResolvedResource$Type.class
 com\csp\migration\service\CheckpointManager.class
 com\csp\migration\service\JsGenerator$DeserializedJs.class
 com\csp\migration\service\FileService.class
@@ -31,3 +36,4 @@ com\csp\migration\config\AppConfig.class
 com\csp\migration\service\CssGenerator.class
 com\csp\migration\exception\SkipFileException.class
 com\csp\migration\service\HtmlGenerator.class
+com\csp\migration\service\JsRewriter.class

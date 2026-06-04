@@ -13,29 +13,31 @@ import java.util.ArrayList;
 public class HtmlGenerator {
 
     /**
-     * Cleans the HTML document by removing inline scripts, inline styles, internal scripts, internal styles,
-     * and external stylesheet/script references, then inserts a single reference to the new generated JS and CSS files.
-     * Writes the output file atomically.
+     * Cleans the HTML document by:
+     * - Removing internal script and style tags.
+     * - Removing inline event handlers from all elements.
+     * - Preserving external script and style references.
+     * - Conditionally inserting references to the newly generated CSS/JS files.
      */
-    public static void generateCspCompliantHtml(Document doc, Path targetHtmlPath, String jsFileName, String cssFileName, ConversionReport report)
-            throws IOException {
+    public static void generateCspCompliantHtml(Document doc, Path targetHtmlPath, 
+                                                String jsFileName, String cssFileName, 
+                                                boolean hasGeneratedJs, boolean hasGeneratedCss, 
+                                                ConversionReport report) throws IOException {
         
-        // 1. Remove all script tags (both internal and external)
-        Elements scripts = doc.select("script");
-        scripts.remove();
+        // 1. Remove internal script tags (those without src)
+        Elements internalScripts = doc.select("script:not([src])");
+        internalScripts.remove();
 
-        // 2. Remove all style tags
-        Elements styles = doc.select("style");
-        styles.remove();
+        // 2. Remove internal style tags
+        Elements internalStyles = doc.select("style");
+        internalStyles.remove();
 
-        // 3. Remove all stylesheet link tags (link rel=stylesheet)
-        Elements links = doc.select("link[rel=stylesheet]");
-        links.remove();
-
-        // 4. Clean inline event handlers and inline styles from all elements
+        // 3. Clean inline event handlers and remaining style attributes from all elements
         for (Element element : doc.getAllElements()) {
-            // Remove style attribute
-            element.removeAttr("style");
+            // Remove remaining style attribute if empty
+            if (element.hasAttr("style") && element.attr("style").trim().isEmpty()) {
+                element.removeAttr("style");
+            }
 
             // Remove any attribute starting with "on"
             for (Attribute attr : new ArrayList<>(element.attributes().asList())) {
@@ -46,27 +48,36 @@ public class HtmlGenerator {
             }
         }
 
-        // 5. Append references to generated CSS and JS files in the head
+        // 4. Append references to generated CSS and JS files in the head if applicable
         Element head = doc.head();
         if (head == null) {
-            // If head is missing, prepend a head element
             head = doc.prependElement("head");
         }
 
-        // Add CSS link
-        head.appendElement("link")
-                .attr("rel", "stylesheet")
-                .attr("href", cssFileName);
+        // Check if links are already present to avoid duplicates
+        if (hasGeneratedCss) {
+            boolean hasLink = doc.select("link[href=" + cssFileName + "]").size() > 0;
+            if (!hasLink) {
+                head.appendElement("link")
+                        .attr("rel", "stylesheet")
+                        .attr("href", cssFileName);
+            }
+        }
 
-        // Add JS script link
-        head.appendElement("script")
-                .attr("src", jsFileName);
+        if (hasGeneratedJs) {
+            boolean hasScript = doc.select("script[src=" + jsFileName + "]").size() > 0;
+            if (!hasScript) {
+                head.appendElement("script")
+                        .attr("src", jsFileName);
+            }
+        }
 
-        // 6. Write the cleaned HTML file atomically
+        // 5. Write the cleaned HTML file atomically
         String htmlContent = doc.outerHtml();
         FileService.writeStringTransactionally(targetHtmlPath, htmlContent);
         
         report.incrementHtmlFilesProcessed();
+        report.addHtmlFile(targetHtmlPath.getFileName().toString());
         LoggerService.info("Generated CSP-compliant HTML at: " + targetHtmlPath.toAbsolutePath());
     }
 }
