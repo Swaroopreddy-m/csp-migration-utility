@@ -82,5 +82,10 @@ public class StyleExtractorPriorityTest {
         Element panel2 = doc.getElementById("panel2");
         assertFalse(panel2.hasAttr("hidden")); // display:block -> hidden attribute removed
         assertFalse(panel2.hasAttr("style")); // display:block declaration removed
+
+        // Assert report metrics
+        assertEquals(1, report.getDisplayNoneConversionsCount());
+        assertEquals(1, report.getDisplayBlockConversionsCount());
+        assertEquals(0, report.getDisplayEmptyConversionsCount());
     }
 }

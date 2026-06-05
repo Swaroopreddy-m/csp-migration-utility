@@ -101,9 +101,12 @@ public class StyleExtractor {
         String fileName = htmlFile.getFileName().toString();
 
         java.util.Set<String> existingIds = new java.util.HashSet<>();
+        java.util.Map<String, Integer> idCounts = new java.util.HashMap<>();
         for (Element el : doc.getAllElements()) {
             if (el.hasAttr("id") && !el.attr("id").trim().isEmpty()) {
-                existingIds.add(el.attr("id").trim());
+                String id = el.attr("id").trim();
+                existingIds.add(id);
+                idCounts.put(id, idCounts.getOrDefault(id, 0) + 1);
             }
         }
         
@@ -144,9 +147,14 @@ public class StyleExtractor {
                 if ("none".equals(displayVal)) {
                     element.attr("hidden", "");
                     report.addDisplayNoneConversion(String.format("Migrated display:none to hidden attribute on <%s> in %s", element.tagName(), fileName));
-                } else if ("block".equals(displayVal) || displayVal.isEmpty()) {
+                    report.incrementDisplayNoneConversions();
+                } else if ("block".equals(displayVal)) {
                     element.removeAttr("hidden");
-                    report.addDisplayNoneConversion(String.format("Ensured display:%s element <%s> is not hidden in %s", displayVal, element.tagName(), fileName));
+                    report.addDisplayNoneConversion(String.format("Ensured display:block element <%s> is not hidden in %s", element.tagName(), fileName));
+                    report.incrementDisplayBlockConversions();
+                } else if (displayVal.isEmpty()) {
+                    report.addDisplayNoneConversion(String.format("Ensured display:'' element <%s> display declaration is removed in %s", element.tagName(), fileName));
+                    report.incrementDisplayEmptyConversions();
                 }
             }
 
@@ -168,6 +176,10 @@ public class StyleExtractor {
                 // Priority 1 & 2: Reuse existing ID
                 selector = "#" + elementId;
                 report.addExistingIdReused(elementId);
+                if (idCounts.getOrDefault(elementId, 0) > 1) {
+                    report.addDuplicateId(elementId);
+                    report.addManualReviewWarning(String.format("Duplicate ID '%s' found in %s", elementId, fileName));
+                }
             } else if (!elementName.isEmpty()) {
                 // Priority 3: No ID but Name exists
                 // Ensure name is unique to be used as ID

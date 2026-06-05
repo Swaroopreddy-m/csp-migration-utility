@@ -72,15 +72,14 @@ public class Main {
         Path htmlFolder = InputManager.getAndValidateHtmlFolder();
         Path jsFolder = InputManager.getJsOutputFolder();
         Path cssFolder = InputManager.getCssOutputFolder();
-        String contextPath = InputManager.getAndValidateApplicationContextPath();
 
         // Check for partial conversions (existing files in target directories)
         List<Path> htmlFiles = discoverHtmlFiles(htmlFolder);
         boolean filesExist = RecoveryManager.detectPreExistingFiles(htmlFiles, jsFolder, cssFolder);
 
-        AppConfig config = new AppConfig(htmlFolder, jsFolder, cssFolder, "NEW_CONVERSION", contextPath);
+        AppConfig config = new AppConfig(htmlFolder, jsFolder, cssFolder, "NEW_CONVERSION", "");
         ConversionState state = new ConversionState();
-        state.setApplicationContextPath(contextPath);
+        state.setApplicationContextPath("");
         ConversionReport report = new ConversionReport();
 
         if (filesExist) {
@@ -122,7 +121,6 @@ public class Main {
     private static void runUpdateConversion() {
         LoggerService.info("User selected: Update Existing Conversion Mode");
         Path htmlLocation = InputManager.getAndValidateHtmlLocationForUpdate();
-        String contextPath = InputManager.getAndValidateApplicationContextPath();
 
         // Discover HTML files from input
         List<Path> htmlFiles = new ArrayList<>();
@@ -176,9 +174,9 @@ public class Main {
         // We will execute the App for each HTML file's directory
         for (Path file : filesToProcess) {
             Path parentDir = file.getParent();
-            AppConfig config = new AppConfig(file, parentDir, parentDir, "UPDATE_CONVERSION", contextPath);
+            AppConfig config = new AppConfig(file, parentDir, parentDir, "UPDATE_CONVERSION", "");
             ConversionState state = new ConversionState();
-            state.setApplicationContextPath(contextPath);
+            state.setApplicationContextPath("");
             executeApp(config, state, report);
         }
     }
@@ -232,17 +230,20 @@ public class Main {
         System.out.println("CONVERSION COMPLETED SUCCESSFULLY");
         System.out.println("=========================================");
         System.out.println("HTML Files Processed     : " + report.getHtmlFilesProcessed());
-        System.out.println("JS Files Generated       : " + report.getJsFilesGenerated());
-        System.out.println("CSS Files Generated      : " + report.getCssFilesGenerated());
+        System.out.println("CSS Files Created        : " + report.getCssFilesCreatedList().size());
+        System.out.println("CSS Files Updated        : " + report.getCssFilesUpdatedList().size());
+        System.out.println("Selectors Added          : " + report.getSelectorsAdded());
+        System.out.println("Selectors Merged         : " + report.getSelectorsMerged());
         System.out.println();
-        System.out.println("New Scripts Added        : " + report.getNewScriptsAdded());
-        System.out.println("New Styles Added         : " + report.getNewStylesAdded());
+        System.out.println("Display None Conversions : " + report.getDisplayNoneConversionsCount());
+        System.out.println("Display Block Conversions: " + report.getDisplayBlockConversionsCount());
+        System.out.println("Display Empty Conversions: " + report.getDisplayEmptyConversionsCount());
         System.out.println();
-        System.out.println("Duplicate Scripts Removed: " + report.getDuplicateScriptsRemoved());
-        System.out.println("Duplicate Styles Removed : " + report.getDuplicateStylesRemoved());
+        System.out.println("JS Display Conversions   : " + report.getJsStyleDisplayConversionsCount());
+        System.out.println("JS jQuery Hide Convs     : " + report.getJsHideConversionsCount());
+        System.out.println("JS jQuery Show Convs     : " + report.getJsShowConversionsCount());
         System.out.println();
-        System.out.println("Generated Classes        : " + report.getGeneratedClasses());
-        System.out.println();
+        System.out.println("Duplicate IDs Detected   : " + report.getDuplicateIdsList().size());
         System.out.println("Warnings                 : " + report.getWarnings());
         System.out.println("Errors                   : " + report.getErrors());
         System.out.println("=========================================");

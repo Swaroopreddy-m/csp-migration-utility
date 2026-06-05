@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ResourceResolver {
 
@@ -49,7 +50,7 @@ public class ResourceResolver {
     /**
      * Resolves the imported CSS stylesheets in the HTML document.
      */
-    public List<ResolvedResource> resolveCssResources(Document doc, Path htmlFile, String contextPath, ConversionState state, ConversionReport report) {
+    public List<ResolvedResource> resolveCssResources(Document doc, Path htmlFile, ConversionState state, ConversionReport report) {
         List<ResolvedResource> resolvedList = new ArrayList<>();
         Elements links = doc.select("link[rel=stylesheet], link[href$=.css]");
 
@@ -65,7 +66,7 @@ public class ResourceResolver {
                 continue;
             }
 
-            ResolvedResource res = resolveResource(ResolvedResource.Type.CSS, href, htmlFile, contextPath, state, report);
+            ResolvedResource res = resolveResource(ResolvedResource.Type.CSS, href, htmlFile, state, report);
             if (res != null) {
                 resolvedList.add(res);
                 report.addCssFile(res.getResolvedPath().toAbsolutePath().toString());
@@ -77,7 +78,7 @@ public class ResourceResolver {
     /**
      * Resolves the imported scripts in the HTML document.
      */
-    public List<ResolvedResource> resolveJsResources(Document doc, Path htmlFile, String contextPath, ConversionState state, ConversionReport report) {
+    public List<ResolvedResource> resolveJsResources(Document doc, Path htmlFile, ConversionState state, ConversionReport report) {
         List<ResolvedResource> resolvedList = new ArrayList<>();
         Elements scripts = doc.select("script[src]");
 
@@ -93,7 +94,7 @@ public class ResourceResolver {
                 continue;
             }
 
-            ResolvedResource res = resolveResource(ResolvedResource.Type.JS, src, htmlFile, contextPath, state, report);
+            ResolvedResource res = resolveResource(ResolvedResource.Type.JS, src, htmlFile, state, report);
             if (res != null) {
                 resolvedList.add(res);
                 report.addJsFile(res.getResolvedPath().toAbsolutePath().toString());
@@ -106,21 +107,11 @@ public class ResourceResolver {
         return path.startsWith("http://") || path.startsWith("https://") || path.startsWith("//");
     }
 
-    private ResolvedResource resolveResource(ResolvedResource.Type type, String originalPath, Path htmlFile, String contextPath, ConversionState state, ConversionReport report) {
+    private ResolvedResource resolveResource(ResolvedResource.Type type, String originalPath, Path htmlFile, ConversionState state, ConversionReport report) {
         // Try relative path resolution first
         Path relativePath = htmlFile.getParent().resolve(originalPath).normalize();
         if (Files.exists(relativePath) && Files.isRegularFile(relativePath)) {
             return new ResolvedResource(type, originalPath, relativePath, null);
-        }
-
-        // Try replacing DYN_CONTEXT_PATH
-        if (originalPath.contains("DYN_CONTEXT_PATH")) {
-            String ctx = contextPath != null ? contextPath : "";
-            String replacedStr = originalPath.replace("DYN_CONTEXT_PATH", ctx);
-            Path replacedPath = Paths.get(replacedStr).normalize();
-            if (Files.exists(replacedPath) && Files.isRegularFile(replacedPath)) {
-                return new ResolvedResource(type, originalPath, replacedPath, null);
-            }
         }
 
         // Try using existing mapped path from state
@@ -147,36 +138,128 @@ public class ResourceResolver {
             System.out.println("=========================================");
             System.out.println("MISSING RESOURCE DETECTED");
             System.out.println("=========================================");
-            System.out.println("HTML File     : " + htmlFile.toAbsolutePath());
-            System.out.println("Original Path : " + originalPath);
-            
-            String replacedStr = null;
-            if (originalPath.contains("DYN_CONTEXT_PATH")) {
-                String ctx = contextPath != null ? contextPath : "";
-                replacedStr = originalPath.replace("DYN_CONTEXT_PATH", ctx);
-                System.out.println("Replaced Path : " + replacedStr);
-            }
+            System.out.println("HTML File          : " + htmlFile.toAbsolutePath());
+            System.out.println("Imported Resource  : " + originalPath);
+            System.out.println("Attempted Location : " + relativePath.toAbsolutePath());
+            System.out.println("=========================================");
+            System.out.println("Resource not found.");
 
             report.addMissingResource(originalPath + " (in " + htmlFile.getFileName() + ")");
 
             Path userPath = null;
             while (userPath == null) {
-                String input = InputManager.readLine("Provide correct file path (or type 'skip'): ");
-                if ("skip".equalsIgnoreCase(input)) {
+                String rootFolderInput = InputManager.readLine("Please provide the root folder that contains this resource (or type 'skip'): ");
+                if ("skip".equalsIgnoreCase(rootFolderInput)) {
                     report.addManualReviewWarning("User skipped missing resource: " + originalPath + " in " + htmlFile.getFileName());
                     return null;
                 }
+
+                Path rootPath = Paths.get(rootFolderInput).toAbsolutePath().normalize();
+                if (!Files.exists(rootPath) || !Files.isDirectory(rootPath)) {
+                    System.out.println("Folder does not exist or is not a directory at " + rootPath + ". Try again.");
+                    continue;
+                }
+
+                // Valid folder, add to report root folders
+                report.addUserRootFolder(rootPath.toString());
+
+                // Clean up the path to extract the filename
+                String cleanPath = originalPath;
+                int qIdx = cleanPath.indexOf('?');
+                if (qIdx != -1) {
+                    cleanPath = cleanPath.substring(0, qIdx);
+                }
+                int hIdx = cleanPath.indexOf('#');
+                if (hIdx != -1) {
+                    cleanPath = cleanPath.substring(0, hIdx);
+                }
                 
-                Path p = Paths.get(input).normalize();
-                if (Files.exists(p) && Files.isRegularFile(p)) {
-                    userPath = p;
-                } else {
-                    // Try resolving relative to HTML if it's relative
-                    Path pr = htmlFile.getParent().resolve(input).normalize();
-                    if (Files.exists(pr) && Files.isRegularFile(pr)) {
-                        userPath = pr;
+                String filename;
+                try {
+                    filename = Paths.get(cleanPath).getFileName().toString();
+                } catch (Exception e) {
+                    String temp = cleanPath.replace("DYN_CONTEXT_PATH/", "").replace("DYN_CONTEXT_PATH", "");
+                    int lastSlash = Math.max(temp.lastIndexOf('/'), temp.lastIndexOf('\\'));
+                    if (lastSlash != -1) {
+                        filename = temp.substring(lastSlash + 1);
                     } else {
-                        System.out.println("File not found: " + p.toAbsolutePath() + ". Try again.");
+                        filename = temp;
+                    }
+                }
+                
+                final String finalFilename = filename;
+
+                // Recursively search the directory
+                List<Path> matches = new ArrayList<>();
+                try (Stream<Path> stream = Files.walk(rootPath)) {
+                    stream.filter(Files::isRegularFile)
+                          .forEach(p -> {
+                              if (p.getFileName().toString().equalsIgnoreCase(finalFilename)) {
+                                  matches.add(p);
+                              }
+                          });
+                } catch (IOException e) {
+                    System.out.println("Failed to search directory: " + e.getMessage());
+                    continue;
+                }
+
+                if (matches.isEmpty()) {
+                    System.out.println("No matches found in the provided root folder.");
+                    String[] options = {"Provide another root folder", "Enter absolute path manually", "Skip resource"};
+                    int choice = InputManager.promptMenu("No matches found. What would you like to do?", options);
+                    if (choice == 2) {
+                        userPath = promptManualPath(htmlFile, originalPath);
+                        if (userPath != null) break;
+                    } else if (choice == 3) {
+                        report.addManualReviewWarning("User skipped missing resource: " + originalPath + " in " + htmlFile.getFileName());
+                        return null;
+                    }
+                    // Otherwise choice == 1, loop again
+                } else if (matches.size() == 1) {
+                    userPath = matches.get(0);
+                    System.out.println("Discovered resource: " + userPath.toAbsolutePath());
+                    report.addDiscoveredResourcePath(userPath.toAbsolutePath().toString());
+                } else {
+                    // Multiple matches found, try suffix matching
+                    String suffixPath = cleanPath.replace("DYN_CONTEXT_PATH/", "").replace("DYN_CONTEXT_PATH", "");
+                    suffixPath = suffixPath.replace("/", java.io.File.separator).replace("\\", java.io.File.separator);
+                    if (suffixPath.startsWith(java.io.File.separator)) {
+                        suffixPath = suffixPath.substring(1);
+                    }
+                    
+                    List<Path> suffixMatches = new ArrayList<>();
+                    for (Path match : matches) {
+                        String absPath = match.toAbsolutePath().toString();
+                        if (absPath.toLowerCase().endsWith(suffixPath.toLowerCase())) {
+                            suffixMatches.add(match);
+                        }
+                    }
+
+                    if (suffixMatches.size() == 1) {
+                        userPath = suffixMatches.get(0);
+                        System.out.println("Discovered resource (suffix match): " + userPath.toAbsolutePath());
+                        report.addDiscoveredResourcePath(userPath.toAbsolutePath().toString());
+                    } else {
+                        // Multiple matches still exist or suffix matches is empty but matches is not.
+                        List<Path> candidates = suffixMatches.isEmpty() ? matches : suffixMatches;
+                        String[] options = new String[candidates.size() + 2];
+                        for (int i = 0; i < candidates.size(); i++) {
+                            options[i] = candidates.get(i).toAbsolutePath().toString();
+                        }
+                        options[candidates.size()] = "Enter custom path manually";
+                        options[candidates.size() + 1] = "Skip resource";
+
+                        int choice = InputManager.promptMenu("Multiple matches found for '" + filename + "'. Please choose one:", options);
+                        if (choice >= 1 && choice <= candidates.size()) {
+                            userPath = candidates.get(choice - 1);
+                            report.addDiscoveredResourcePath(userPath.toAbsolutePath().toString());
+                        } else if (choice == candidates.size() + 1) {
+                            userPath = promptManualPath(htmlFile, originalPath);
+                            if (userPath != null) break;
+                        } else {
+                            report.addManualReviewWarning("User skipped missing resource: " + originalPath + " in " + htmlFile.getFileName());
+                            return null;
+                        }
                     }
                 }
             }
@@ -186,6 +269,21 @@ public class ResourceResolver {
             report.addUserResourceMapping(originalPath, userPathStr);
             
             return new ResolvedResource(type, originalPath, userPath, userPathStr);
+        }
+    }
+
+    private Path promptManualPath(Path htmlFile, String originalPath) {
+        while (true) {
+            String input = InputManager.readLine("Enter the absolute path to the resource (or type 'skip'): ");
+            if ("skip".equalsIgnoreCase(input)) {
+                return null;
+            }
+            Path p = Paths.get(input).toAbsolutePath().normalize();
+            if (Files.exists(p) && Files.isRegularFile(p)) {
+                return p;
+            } else {
+                System.out.println("File not found: " + p + ". Try again.");
+            }
         }
     }
 }

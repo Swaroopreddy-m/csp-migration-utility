@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.regex.Pattern;
 
 public class App {
     private final AppConfig config;
@@ -92,9 +93,25 @@ public class App {
     private void executePhases() throws ExitRequestedException {
         String currentPhase = state.getPhase();
         if (currentPhase == null) {
-            currentPhase = "EXTERNAL_SCRIPT_PROCESSING";
+            currentPhase = "RESOURCE_RESOLUTION_AND_JS_PROCESSING";
             state.setPhase(currentPhase);
             saveState();
+        } else {
+            // Map legacy phases to new phase names
+            if (currentPhase.equals("EXTERNAL_SCRIPT_PROCESSING") ||
+                currentPhase.equals("INTERNAL_SCRIPT_PROCESSING") ||
+                currentPhase.equals("INLINE_SCRIPT_PROCESSING") ||
+                currentPhase.equals("SCRIPT_COMPLETED")) {
+                currentPhase = "RESOURCE_RESOLUTION_AND_JS_PROCESSING";
+                state.setPhase(currentPhase);
+                saveState();
+            } else if (currentPhase.equals("EXTERNAL_STYLE_PROCESSING") ||
+                       currentPhase.equals("INTERNAL_STYLE_PROCESSING") ||
+                       currentPhase.equals("INLINE_STYLE_PROCESSING")) {
+                currentPhase = "STYLE_PROCESSING";
+                state.setPhase(currentPhase);
+                saveState();
+            }
         }
 
         while (currentPhase != null && !currentPhase.equals("COMPLETED")) {
@@ -105,31 +122,15 @@ public class App {
             LoggerService.info("Entering phase: " + currentPhase);
             try {
                 switch (currentPhase) {
-                    case "EXTERNAL_SCRIPT_PROCESSING":
-                        runParallelTask(this::processExternalScripts);
-                        transitionTo("INTERNAL_SCRIPT_PROCESSING");
+                    case "RESOURCE_RESOLUTION_AND_JS_PROCESSING":
+                        runParallelTask(this::processResourceResolutionAndJsProcessing);
+                        transitionTo("RESOURCE_RESOLUTION_COMPLETED");
                         break;
-                    case "INTERNAL_SCRIPT_PROCESSING":
-                        runParallelTask(this::processInternalScripts);
-                        transitionTo("INLINE_SCRIPT_PROCESSING");
+                    case "RESOURCE_RESOLUTION_COMPLETED":
+                        confirmResourceResolutionCompletion();
                         break;
-                    case "INLINE_SCRIPT_PROCESSING":
-                        runParallelTask(this::processInlineScripts);
-                        transitionTo("SCRIPT_COMPLETED");
-                        break;
-                    case "SCRIPT_COMPLETED":
-                        confirmScriptCompletion();
-                        break;
-                    case "EXTERNAL_STYLE_PROCESSING":
-                        runParallelTask(this::processExternalStyles);
-                        transitionTo("INTERNAL_STYLE_PROCESSING");
-                        break;
-                    case "INTERNAL_STYLE_PROCESSING":
-                        runParallelTask(this::processInternalStyles);
-                        transitionTo("INLINE_STYLE_PROCESSING");
-                        break;
-                    case "INLINE_STYLE_PROCESSING":
-                        runParallelTask(this::processInlineStyles);
+                    case "STYLE_PROCESSING":
+                        runParallelTask(this::processStyleProcessing);
                         transitionTo("STYLE_COMPLETED");
                         break;
                     case "STYLE_COMPLETED":
@@ -222,51 +223,30 @@ public class App {
         }
     }
 
-    // --- SCRIPT EXTRACTION METHODS ---
+    // --- RESOURCE RESOLUTION & JS PROCESSING ---
 
-    private void processExternalScripts(Path file) throws SkipFileException, ExitRequestedException, IOException {
+    private void processResourceResolutionAndJsProcessing(Path file) throws SkipFileException, ExitRequestedException, IOException {
         Document doc = HtmlParser.parse(file.toFile());
         ResourceResolver resolver = new ResourceResolver();
-        List<ResourceResolver.ResolvedResource> jsResources = resolver.resolveJsResources(doc, file, config.getApplicationContextPath(), state, report);
+        List<ResourceResolver.ResolvedResource> jsResources = resolver.resolveJsResources(doc, file, state, report);
         for (ResourceResolver.ResolvedResource res : jsResources) {
             JsRewriter.rewriteJsFile(res.getResolvedPath(), report);
         }
+        resolver.resolveCssResources(doc, file, state, report);
     }
 
-    private void processInternalScripts(Path file) throws SkipFileException, ExitRequestedException, IOException {
-        Document doc = HtmlParser.parse(file.toFile());
-        List<JsBlock> blocks = scriptExtractor.extractInternalScripts(doc, report);
-        if (!blocks.isEmpty()) {
-            Path jsFile = config.getJsFolder().resolve(RecoveryManager.getBaseName(file) + ".js");
-            UpdateManager.updateJsFile(jsFile, blocks, report);
-            addGeneratedJsFile(jsFile.getFileName().toString());
+    private void confirmResourceResolutionCompletion() throws ExitRequestedException {
+        if ("true".equalsIgnoreCase(System.getProperty("csp.headless"))) {
+            transitionTo("STYLE_PROCESSING");
+            return;
         }
-    }
 
-    private void processInlineScripts(Path file) throws SkipFileException, ExitRequestedException, IOException {
-        Document doc = HtmlParser.parse(file.toFile());
-        ClassNameGenerator classGen = new ClassNameGenerator();
-        // Scan HTML for existing classes to avoid conflicts
-        classGen.scanExistingClasses(doc.html());
-        
-        List<JsBlock> blocks = scriptExtractor.extractInlineScripts(doc, classGen, report);
-        if (!blocks.isEmpty()) {
-            Path jsFile = config.getJsFolder().resolve(RecoveryManager.getBaseName(file) + ".js");
-            UpdateManager.updateJsFile(jsFile, blocks, report);
-            addGeneratedJsFile(jsFile.getFileName().toString());
-            
-            // Write the intermediate HTML back to disk to persist the generated class names
-            FileService.writeStringTransactionally(file, doc.outerHtml());
-        }
-    }
-
-    private void confirmScriptCompletion() throws ExitRequestedException {
         System.out.println();
         System.out.println("=========================================");
-        System.out.println("SCRIPT EXTRACTION COMPLETED");
+        System.out.println("RESOURCE RESOLUTION & JS PROCESSING COMPLETED");
         System.out.println("=========================================");
         System.out.println("Files Processed : " + htmlFiles.size());
-        System.out.println("JS Files Created : " + state.getGeneratedJsFiles().size());
+        System.out.println("JS Visibility Conversions : " + (report.getJsStyleDisplayConversionsCount() + report.getJsHideConversionsCount() + report.getJsShowConversionsCount()));
         System.out.println("Warnings : " + report.getWarnings());
         System.out.println("Errors : " + report.getErrors());
         System.out.println();
@@ -274,70 +254,79 @@ public class App {
         String[] options = {"Continue To Style Processing", "Exit"};
         int choice = InputManager.promptMenu(null, options);
         if (choice == 2) {
-            throw new ExitRequestedException("User chose to exit after script completion.");
+            throw new ExitRequestedException("User chose to exit after resource resolution.");
         }
-        transitionTo("EXTERNAL_STYLE_PROCESSING");
+        transitionTo("STYLE_PROCESSING");
     }
 
-    // --- STYLE EXTRACTION METHODS ---
+    // --- STYLE PROCESSING METHODS ---
 
-    private void processExternalStyles(Path file) throws SkipFileException, ExitRequestedException, IOException {
+    private void processStyleProcessing(Path file) throws SkipFileException, ExitRequestedException, IOException {
         Document doc = HtmlParser.parse(file.toFile());
-        ResourceResolver resolver = new ResourceResolver();
-        resolver.resolveCssResources(doc, file, config.getApplicationContextPath(), state, report);
-    }
+        boolean docModified = false;
 
-    private void processInternalStyles(Path file) throws SkipFileException, ExitRequestedException, IOException {
-        Document doc = HtmlParser.parse(file.toFile());
-        List<CssBlock> blocks = styleExtractor.extractInternalStyles(doc, report);
-        if (!blocks.isEmpty()) {
-            Path cssFile = config.getCssFolder().resolve(RecoveryManager.getBaseName(file) + ".css");
-            UpdateManager.updateCssFile(cssFile, blocks, report);
+        // 1. Process internal styles
+        List<CssBlock> internalBlocks = styleExtractor.extractInternalStyles(doc, report);
+        Path cssFile = config.getCssFolder().resolve(RecoveryManager.getBaseName(file) + ".css");
+        if (!internalBlocks.isEmpty()) {
+            UpdateManager.updateCssFile(cssFile, internalBlocks, report);
             addGeneratedCssFile(cssFile.getFileName().toString());
         }
-    }
 
-    private void processInlineStyles(Path file) throws SkipFileException, ExitRequestedException, IOException {
-        Document doc = HtmlParser.parse(file.toFile());
-        List<CssBlock> blocks = styleExtractor.extractInlineStyles(doc, file, report);
+        // 2. Process inline styles
+        List<CssBlock> inlineBlocks = styleExtractor.extractInlineStyles(doc, file, report);
         
-        if (!blocks.isEmpty()) {
+        // Always ensure pageName.css exists (and register it in state)
+        if (!Files.exists(cssFile)) {
+            FileService.writeStringTransactionally(cssFile, "");
+        }
+        addGeneratedCssFile(cssFile.getFileName().toString());
+        
+        if (!inlineBlocks.isEmpty()) {
             ResourceResolver resolver = new ResourceResolver();
-            List<ResourceResolver.ResolvedResource> cssResources = resolver.resolveCssResources(doc, file, config.getApplicationContextPath(), state, report);
+            List<ResourceResolver.ResolvedResource> cssResources = resolver.resolveCssResources(doc, file, state, report);
             
-            if (!cssResources.isEmpty()) {
-                for (CssBlock block : blocks) {
-                    Path targetCssFile = cssResources.get(cssResources.size() - 1).getResolvedPath();
-                    for (ResourceResolver.ResolvedResource res : cssResources) {
-                        Path path = res.getResolvedPath();
-                        if (Files.exists(path)) {
-                            String cssText = Files.readString(path);
-                            if (cssText.contains(block.getSelector() + " ") || cssText.contains(block.getSelector() + "{") || cssText.contains(block.getSelector() + "\n")) {
-                                targetCssFile = path;
-                                break;
-                            }
+            for (CssBlock block : inlineBlocks) {
+                Path targetCssFile = null;
+                for (ResourceResolver.ResolvedResource res : cssResources) {
+                    Path path = res.getResolvedPath();
+                    if (Files.exists(path)) {
+                        String cssText = Files.readString(path);
+                        String regex = "(?s)(?:^|\\s|\\}|,)" + Pattern.quote(block.getSelector()) + "\\s*\\{";
+                        if (Pattern.compile(regex).matcher(cssText).find()) {
+                            targetCssFile = path;
+                            break;
                         }
                     }
-                    CssMerger.mergeStylesIntoFile(targetCssFile, block.getSelector(), block.getContent(), report);
                 }
-            } else {
-                Path cssFile = config.getCssFolder().resolve(RecoveryManager.getBaseName(file) + ".css");
-                UpdateManager.updateCssFile(cssFile, blocks, report);
-                addGeneratedCssFile(cssFile.getFileName().toString());
+                if (targetCssFile == null) {
+                    targetCssFile = cssFile;
+                }
+                CssMerger.mergeStylesIntoFile(targetCssFile, block.getSelector(), block.getContent(), report);
             }
+            docModified = true;
+        }
 
+        if (docModified) {
             // Write intermediate HTML back to disk to persist generated IDs and display changes
             FileService.writeStringTransactionally(file, doc.outerHtml());
         }
     }
 
     private void confirmStyleCompletion() throws ExitRequestedException {
+        if ("true".equalsIgnoreCase(System.getProperty("csp.headless"))) {
+            transitionTo("HTML_GENERATION");
+            return;
+        }
+
         System.out.println();
         System.out.println("=========================================");
         System.out.println("STYLE EXTRACTION COMPLETED");
         System.out.println("=========================================");
         System.out.println("Files Processed : " + htmlFiles.size());
         System.out.println("CSS Files Created : " + state.getGeneratedCssFiles().size());
+        System.out.println("Selectors Added : " + report.getSelectorsAdded());
+        System.out.println("Selectors Merged : " + report.getSelectorsMerged());
         System.out.println("Warnings : " + report.getWarnings());
         System.out.println("Errors : " + report.getErrors());
         System.out.println();

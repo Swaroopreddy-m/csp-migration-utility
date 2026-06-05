@@ -25,9 +25,22 @@ public class LoggerService {
         }
     }
 
+    private static String getCallerContext() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for (int i = 1; i < stackTrace.length; i++) {
+            String className = stackTrace[i].getClassName();
+            if (!className.equals(LoggerService.class.getName()) && !className.equals(Thread.class.getName())) {
+                String simpleName = className.substring(className.lastIndexOf('.') + 1);
+                return simpleName + "." + stackTrace[i].getMethodName() + ":" + stackTrace[i].getLineNumber();
+            }
+        }
+        return "Unknown";
+    }
+
     private static synchronized void log(Path logFile, String level, String message) {
         String timestamp = LocalDateTime.now().format(FORMATTER);
-        String logEntry = String.format("[%s] [%s] - %s%n", timestamp, level, message);
+        String callerContext = getCallerContext();
+        String logEntry = String.format("[%s] [%s] [%s] - %s%n", timestamp, level, callerContext, message);
         try {
             Files.writeString(logFile, logEntry, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {

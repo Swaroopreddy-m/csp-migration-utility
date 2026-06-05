@@ -13,7 +13,8 @@ import java.util.regex.Pattern;
 public class JsRewriter {
 
     private static final Pattern DISPLAY_PATTERN = Pattern.compile("(\\b[\\w\\$.]+)\\.style\\.display\\s*=\\s*(['\"])(none|block|)\\2\\s*;?");
-    private static final Pattern JQUERY_PATTERN = Pattern.compile("\\$\\(\\s*([\\w\\$.]+|this)\\s*\\)\\.(hide|show)\\(\\s*\\)\\s*;?");
+    private static final Pattern LITERAL_JQUERY_PATTERN = Pattern.compile("\\$\\(\\s*(['\"])(.*?)\\1\\s*\\)\\.(hide|show)\\(\\s*\\)\\s*;?");
+    private static final Pattern VARIABLE_JQUERY_PATTERN = Pattern.compile("\\$\\(\\s*([\\w\\$.]+|this)\\s*\\)\\.(hide|show)\\(\\s*\\)\\s*;?");
 
     // Scanning patterns for visibility-related warnings
     private static final Pattern WARNING_VISIBILITY = Pattern.compile("\\.style\\.visibility\\s*=");
@@ -51,17 +52,41 @@ public class JsRewriter {
                 modified = true;
                 
                 report.addJsVisibilityConversion(String.format("Line %d: %s -> %s in %s", lineNumber, originalStatement, replacement, fileName));
+                report.incrementJsStyleDisplayConversions(1);
                 LoggerService.update(String.format("Converted display in %s:%d: %s -> %s", fileName, lineNumber, originalStatement, replacement));
                 // Recalculate matcher because string was modified
                 displayMatcher = DISPLAY_PATTERN.matcher(line);
             }
 
-            // 2. Process jQuery hide/show
-            Matcher jqMatcher = JQUERY_PATTERN.matcher(line);
-            while (jqMatcher.find()) {
-                String originalStatement = jqMatcher.group(0);
-                String element = jqMatcher.group(1);
-                String action = jqMatcher.group(2);
+            // 2. Process jQuery hide/show (literal string selectors)
+            Matcher jqLiteralMatcher = LITERAL_JQUERY_PATTERN.matcher(line);
+            while (jqLiteralMatcher.find()) {
+                String originalStatement = jqLiteralMatcher.group(0);
+                String quote = jqLiteralMatcher.group(1);
+                String selector = jqLiteralMatcher.group(2);
+                String action = jqLiteralMatcher.group(3);
+                boolean isHidden = "hide".equals(action);
+                String replacement = "document.querySelector(" + quote + selector + quote + ").hidden = " + isHidden + ";";
+                
+                line = line.replace(originalStatement, replacement);
+                modified = true;
+
+                report.addJsVisibilityConversion(String.format("Line %d: %s -> %s in %s", lineNumber, originalStatement, replacement, fileName));
+                if (isHidden) {
+                    report.incrementJsHideConversions(1);
+                } else {
+                    report.incrementJsShowConversions(1);
+                }
+                LoggerService.update(String.format("Converted jQuery visibility in %s:%d: %s -> %s", fileName, lineNumber, originalStatement, replacement));
+                jqLiteralMatcher = LITERAL_JQUERY_PATTERN.matcher(line);
+            }
+
+            // 3. Process jQuery hide/show (variable selectors)
+            Matcher jqVarMatcher = VARIABLE_JQUERY_PATTERN.matcher(line);
+            while (jqVarMatcher.find()) {
+                String originalStatement = jqVarMatcher.group(0);
+                String element = jqVarMatcher.group(1);
+                String action = jqVarMatcher.group(2);
                 boolean isHidden = "hide".equals(action);
                 String replacement = element + ".hidden = " + isHidden + ";";
                 
@@ -69,8 +94,13 @@ public class JsRewriter {
                 modified = true;
 
                 report.addJsVisibilityConversion(String.format("Line %d: %s -> %s in %s", lineNumber, originalStatement, replacement, fileName));
+                if (isHidden) {
+                    report.incrementJsHideConversions(1);
+                } else {
+                    report.incrementJsShowConversions(1);
+                }
                 LoggerService.update(String.format("Converted jQuery visibility in %s:%d: %s -> %s", fileName, lineNumber, originalStatement, replacement));
-                jqMatcher = JQUERY_PATTERN.matcher(line);
+                jqVarMatcher = VARIABLE_JQUERY_PATTERN.matcher(line);
             }
 
             // 3. Scan for warnings requiring manual review

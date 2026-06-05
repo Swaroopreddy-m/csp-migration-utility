@@ -1,0 +1,18 @@
+[2026-06-04 21:18:04.089] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-04 21:18:04.096] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-04 21:18:04.140] [WARN] - Removed duplicate CSS rule: Internal style block [index=2]
+[2026-06-04 21:18:04.147] [WARN] - Removed duplicate CSS rule: Inline style rule [selector=.box]
+[2026-06-04 21:18:04.151] [WARN] - Removed duplicate JS block: Internal script block [index=2]
+[2026-06-04 21:18:04.154] [WARN] - Removed duplicate JS block: Imported script [src=common.js]
+[2026-06-04 21:18:04.161] [WARN] - Removed duplicate JS block: Event listener [selector=.btn, event=click]
+[2026-06-04 21:18:04.180] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-04 21:18:04.182] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-04 21:18:17.266] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-04 21:18:17.268] [WARN] - Style file not found: C:\Users\user\AppData\Local\Temp\missing_style.css
+[2026-06-04 21:18:17.310] [WARN] - Removed duplicate CSS rule: Internal style block [index=2]
+[2026-06-04 21:18:17.316] [WARN] - Removed duplicate CSS rule: Inline style rule [selector=.box]
+[2026-06-04 21:18:17.321] [WARN] - Removed duplicate JS block: Internal script block [index=2]
+[2026-06-04 21:18:17.323] [WARN] - Removed duplicate JS block: Imported script [src=common.js]
+[2026-06-04 21:18:17.328] [WARN] - Removed duplicate JS block: Event listener [selector=.btn, event=click]
+[2026-06-04 21:18:17.350] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js
+[2026-06-04 21:18:17.353] [WARN] - Script file not found: C:\Users\user\AppData\Local\Temp\missing_script.js

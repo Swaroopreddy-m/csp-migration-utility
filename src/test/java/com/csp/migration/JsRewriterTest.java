@@ -33,6 +33,8 @@ public class JsRewriterTest {
                 "    emptyDiv.style.display = \"\";\n" +
                 "    $(myButton).hide();\n" +
                 "    $(this).show();\n" +
+                "    $('#panel').hide();\n" +
+                "    $(\".myclass\").show();\n" +
                 "    // Complex visibility warnings below\n" +
                 "    myDiv.style.visibility = 'hidden';\n" +
                 "    $(myDiv).css('display', 'none');\n" +
@@ -51,14 +53,20 @@ public class JsRewriterTest {
         assertTrue(updatedContent.contains("emptyDiv.hidden = false;"));
         assertTrue(updatedContent.contains("myButton.hidden = true;"));
         assertTrue(updatedContent.contains("this.hidden = false;"));
+        assertTrue(updatedContent.contains("document.querySelector('#panel').hidden = true;"));
+        assertTrue(updatedContent.contains("document.querySelector(\".myclass\").hidden = false;"));
 
         // Assert display properties were removed/replaced
         assertFalse(updatedContent.contains("style.display = 'none'"));
         assertFalse(updatedContent.contains("style.display = \"block\""));
         assertFalse(updatedContent.contains("$(myButton).hide()"));
+        assertFalse(updatedContent.contains("$('#panel').hide()"));
 
         // Assert report metrics
-        assertEquals(5, report.getJsVisibilityConversions().size());
+        assertEquals(7, report.getJsVisibilityConversions().size());
+        assertEquals(3, report.getJsStyleDisplayConversionsCount());
+        assertEquals(2, report.getJsHideConversionsCount());
+        assertEquals(2, report.getJsShowConversionsCount());
         assertEquals(3, report.getManualReviewWarnings().size());
         assertEquals(3, report.getWarnings());
     }

@@ -177,7 +177,99 @@ public class ConversionReport {
 
     public List<String> getManualReviewWarnings() { return manualReviewWarnings; }
     public void addManualReviewWarning(String warn) {
-        manualReviewWarnings.add(warn);
+        String callerContext = getCallerContext();
+        manualReviewWarnings.add("[" + callerContext + "] " + warn);
         incrementWarnings();
     }
+
+    private String getCallerContext() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for (int i = 1; i < stackTrace.length; i++) {
+            String className = stackTrace[i].getClassName();
+            if (!className.equals(ConversionReport.class.getName()) && !className.equals(Thread.class.getName())) {
+                String simpleName = className.substring(className.lastIndexOf('.') + 1);
+                return simpleName + "." + stackTrace[i].getMethodName();
+            }
+        }
+        return "Unknown";
+    }
+
+    // New Enhancement Fields
+    private final List<String> userRootFolders = new java.util.concurrent.CopyOnWriteArrayList<>();
+    private final List<String> discoveredResourcePaths = new java.util.concurrent.CopyOnWriteArrayList<>();
+    private final List<String> cssFilesCreatedList = new java.util.concurrent.CopyOnWriteArrayList<>();
+    private final List<String> cssFilesUpdatedList = new java.util.concurrent.CopyOnWriteArrayList<>();
+    private final List<String> duplicateIdsList = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    private final AtomicInteger selectorsAdded = new AtomicInteger(0);
+    private final AtomicInteger selectorsMerged = new AtomicInteger(0);
+    
+    private final AtomicInteger displayNoneConversionsCount = new AtomicInteger(0);
+    private final AtomicInteger displayBlockConversionsCount = new AtomicInteger(0);
+    private final AtomicInteger displayEmptyConversionsCount = new AtomicInteger(0);
+
+    private final AtomicInteger jsStyleDisplayConversionsCount = new AtomicInteger(0);
+    private final AtomicInteger jsHideConversionsCount = new AtomicInteger(0);
+    private final AtomicInteger jsShowConversionsCount = new AtomicInteger(0);
+
+    public List<String> getUserRootFolders() { return userRootFolders; }
+    public void addUserRootFolder(String folder) {
+        if (!userRootFolders.contains(folder)) {
+            userRootFolders.add(folder);
+        }
+    }
+
+    public List<String> getDiscoveredResourcePaths() { return discoveredResourcePaths; }
+    public void addDiscoveredResourcePath(String path) {
+        if (!discoveredResourcePaths.contains(path)) {
+            discoveredResourcePaths.add(path);
+        }
+    }
+
+    public List<String> getCssFilesCreatedList() { return cssFilesCreatedList; }
+    public void addCssFileCreated(String file) {
+        if (!cssFilesCreatedList.contains(file)) {
+            cssFilesCreatedList.add(file);
+        }
+    }
+
+    public List<String> getCssFilesUpdatedList() { return cssFilesUpdatedList; }
+    public void addCssFileUpdated(String file) {
+        if (!cssFilesUpdatedList.contains(file)) {
+            cssFilesUpdatedList.add(file);
+        }
+    }
+
+    public List<String> getDuplicateIdsList() { return duplicateIdsList; }
+    public void addDuplicateId(String id) {
+        if (!duplicateIdsList.contains(id)) {
+            duplicateIdsList.add(id);
+        }
+    }
+
+    public int getSelectorsAdded() { return selectorsAdded.get(); }
+    public void incrementSelectorsAdded() { selectorsAdded.incrementAndGet(); }
+    public void addSelectorsAdded(int count) { selectorsAdded.addAndGet(count); }
+
+    public int getSelectorsMerged() { return selectorsMerged.get(); }
+    public void incrementSelectorsMerged() { selectorsMerged.incrementAndGet(); }
+    public void addSelectorsMerged(int count) { selectorsMerged.addAndGet(count); }
+
+    public int getDisplayNoneConversionsCount() { return displayNoneConversionsCount.get(); }
+    public void incrementDisplayNoneConversions() { displayNoneConversionsCount.incrementAndGet(); }
+
+    public int getDisplayBlockConversionsCount() { return displayBlockConversionsCount.get(); }
+    public void incrementDisplayBlockConversions() { displayBlockConversionsCount.incrementAndGet(); }
+
+    public int getDisplayEmptyConversionsCount() { return displayEmptyConversionsCount.get(); }
+    public void incrementDisplayEmptyConversions() { displayEmptyConversionsCount.incrementAndGet(); }
+
+    public int getJsStyleDisplayConversionsCount() { return jsStyleDisplayConversionsCount.get(); }
+    public void incrementJsStyleDisplayConversions(int count) { jsStyleDisplayConversionsCount.addAndGet(count); }
+
+    public int getJsHideConversionsCount() { return jsHideConversionsCount.get(); }
+    public void incrementJsHideConversions(int count) { jsHideConversionsCount.addAndGet(count); }
+
+    public int getJsShowConversionsCount() { return jsShowConversionsCount.get(); }
+    public void incrementJsShowConversions(int count) { jsShowConversionsCount.addAndGet(count); }
 }

@@ -15,10 +15,29 @@ public class CssMerger {
      * Overwrites matching properties for existing selectors; appends new selectors.
      */
     public static synchronized void mergeStylesIntoFile(Path targetPath, String selector, String inlineStyle, com.csp.migration.model.ConversionReport report) throws IOException {
-        String content = Files.exists(targetPath) ? Files.readString(targetPath) : "";
+        boolean existed = Files.exists(targetPath);
+        String content = existed ? Files.readString(targetPath) : "";
+
+        // Check if selector exists before merging
+        String regex = "(?s)(?:^|\\s|\\}|,)" + Pattern.quote(selector) + "\\s*\\{";
+        boolean selectorExisted = Pattern.compile(regex).matcher(content).find();
+
         String updatedContent = mergeStyleContent(content, selector, inlineStyle);
         FileService.writeStringTransactionally(targetPath, updatedContent);
+
         report.addInlineStyleExtracted(selector + " { " + inlineStyle + " } in " + targetPath.getFileName());
+
+        if (selectorExisted) {
+            report.incrementSelectorsMerged();
+        } else {
+            report.incrementSelectorsAdded();
+        }
+
+        if (existed) {
+            report.addCssFileUpdated(targetPath.toAbsolutePath().toString());
+        } else {
+            report.addCssFileCreated(targetPath.toAbsolutePath().toString());
+        }
     }
 
     /**
