@@ -1,0 +1,621 @@
+Original
+=========================================
+<!DOCTYPE html>
+<html onload="">
+<head>
+<meta charset="UTF-8">
+<title>Candy Crush Demo</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#f5f5f5;
+}
+
+h1{
+    color:#ff4081;
+}
+
+#gameBoard{
+    width:480px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(8,60px);
+    grid-template-rows:repeat(8,60px);
+    gap:2px;
+}
+
+.candy{
+    width:60px;
+    height:60px;
+    border-radius:8px;
+    cursor:pointer;
+    border:2px solid white;
+}
+
+.panel{
+    margin:15px;
+    font-size:18px;
+}
+
+input,select{
+    padding:5px;
+}
+
+</style>
+
+<script>
+
+var board = [];
+var rows = 8;
+var cols = 8;
+var score = 0;
+
+var colors = [
+    "red",
+    "blue",
+    "green",
+    "yellow",
+    "purple",
+    "orange"
+];
+
+var dragStart = null;
+
+function startGame(){
+
+    document.getElementById("playerName").value="Player1";
+
+    createBoard();
+
+    setInterval(function(){
+        crushMatches();
+    },300);
+}
+
+function createBoard(){
+
+    let gameBoard = document.getElementById("gameBoard");
+
+    gameBoard.innerHTML="";
+
+    board=[];
+
+    for(let r=0;r<rows;r++){
+
+        board[r]=[];
+
+        for(let c=0;c<cols;c++){
+
+            let color = randomColor();
+
+            board[r][c]=color;
+
+            let candy = document.createElement("div");
+
+            candy.className="candy";
+            candy.id=r+"-"+c;
+            candy.draggable=true;
+            candy.style.background=color;
+
+            candy.addEventListener("dragstart",dragStartFn);
+            candy.addEventListener("dragover",dragOverFn);
+            candy.addEventListener("drop",dropFn);
+
+            gameBoard.appendChild(candy);
+        }
+    }
+}
+
+function randomColor(){
+    return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function dragStartFn(){
+    dragStart=this;
+}
+
+function dragOverFn(e){
+    e.preventDefault();
+}
+
+function dropFn(){
+
+    if(!dragStart || dragStart===this){
+        return;
+    }
+
+    let color1 = dragStart.style.background;
+    let color2 = this.style.background;
+
+    dragStart.style.background=color2;
+    this.style.background=color1;
+}
+
+function crushMatches(){
+
+    let candies=document.querySelectorAll(".candy");
+
+    for(let r=0;r<rows;r++){
+
+        for(let c=0;c<cols-2;c++){
+
+            let idx1=r*cols+c;
+            let idx2=r*cols+c+1;
+            let idx3=r*cols+c+2;
+
+            let color1=candies[idx1].style.background;
+
+            if(
+                color1!=="" &&
+                color1===candies[idx2].style.background &&
+                color1===candies[idx3].style.background
+            ){
+
+                candies[idx1].style.background="";
+                candies[idx2].style.background="";
+                candies[idx3].style.background="";
+
+                increaseScore(30);
+            }
+        }
+    }
+
+    for(let c=0;c<cols;c++){
+
+        for(let r=0;r<rows-2;r++){
+
+            let idx1=r*cols+c;
+            let idx2=(r+1)*cols+c;
+            let idx3=(r+2)*cols+c;
+
+            let color1=candies[idx1].style.background;
+
+            if(
+                color1!=="" &&
+                color1===candies[idx2].style.background &&
+                color1===candies[idx3].style.background
+            ){
+
+                candies[idx1].style.background="";
+                candies[idx2].style.background="";
+                candies[idx3].style.background="";
+
+                increaseScore(30);
+            }
+        }
+    }
+
+    refillBoard();
+}
+
+function refillBoard(){
+
+    let candies=document.querySelectorAll(".candy");
+
+    candies.forEach(function(candy){
+
+        if(candy.style.background===""){
+
+            candy.style.background=randomColor();
+        }
+    });
+}
+
+function increaseScore(points){
+
+    score += points;
+
+    document.getElementById("score").innerHTML=score;
+}
+
+function playerBlur(){
+
+    let name=document.getElementById("playerName").value;
+
+    if(name.trim()===""){
+
+        alert("Player name cannot be empty");
+    }
+}
+
+function levelChanged(){
+
+    let level=document.getElementById("level").value;
+
+    alert("Level changed to "+level);
+}
+
+function hoverMessage(){
+
+    document.getElementById("message").innerHTML=
+        "Swap candies to make 3 matches!";
+}
+
+function clearMessage(){
+
+    document.getElementById("message").innerHTML="";
+}
+
+</script>
+
+</head>
+
+<body onload="startGame()">
+
+<h1>Candy Crush Demo</h1>
+
+<div class="panel">
+
+Player Name:
+
+<input
+type="text"
+id="playerName"
+onblur="playerBlur()"
+style="border:2px solid #ff4081;"
+>
+
+Level:
+
+<select
+id="level"
+onchange="levelChanged()"
+style="background:#fff3cd;"
+>
+<option>Easy</option>
+<option>Medium</option>
+<option>Hard</option>
+</select>
+
+</div>
+
+<div
+style="
+font-size:24px;
+font-weight:bold;
+margin-bottom:10px;
+color:#4caf50;
+">
+Score: <span id="score">0</span>
+</div>
+
+<div
+id="message"
+style="height:25px;color:#2196f3;">
+</div>
+
+<div
+id="gameBoard"
+onmouseover="hoverMessage()"
+onmouseout="clearMessage()">
+</div>
+
+</body>
+</html>
+
+Modified
+=========================================
+<!doctype html>
+<html id="csp_auto_c4b268a3-dfed-3931-af3b-b3f3313d1df2">
+ <head>
+  <meta charset="UTF-8">
+  <title>Candy Crush Demo</title>
+  <link rel="stylesheet" href="css/candy_crush.css">
+  <script src="js/candy_crush.js"></script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
+ </head>
+ <body id="csp_auto_91d3ff57-0085-3249-80ec-352809d5f483">
+  <h1>Candy Crush Demo</h1>
+  <div class="panel">
+   Player Name: <input type="text" id="playerName"> Level: <select id="level"> <option>Easy</option> <option>Medium</option> <option>Hard</option> </select>
+  </div>
+  <div id="csp_auto_style_001">
+   Score: <span id="score">0</span>
+  </div>
+  <div id="message">
+  </div>
+  <div id="gameBoard">
+  </div>
+ </body>
+</html>
+
+Differences
+=========================================
+Line 1 modified
+Line 2 modified
+Line 3 modified
+Line 4 modified
+Line 5 modified
+Line 6 modified
+Line 7 modified
+Line 8 modified
+Line 9 modified
+Line 10 modified
+Line 11 modified
+Line 12 modified
+Line 13 modified
+Line 14 modified
+Line 15 modified
+Line 16 modified
+Line 17 modified
+Line 18 modified
+Line 19 modified
+Line 20 modified
+Line 21 modified
+Line 22 modified
+Line 23 modified
+Line 24 removed
+Line 25 removed
+Line 26 removed
+Line 27 removed
+Line 28 removed
+Line 29 removed
+Line 30 removed
+Line 31 removed
+Line 32 removed
+Line 33 removed
+Line 34 removed
+Line 35 removed
+Line 36 removed
+Line 37 removed
+Line 38 removed
+Line 39 removed
+Line 40 removed
+Line 41 removed
+Line 42 removed
+Line 43 removed
+Line 44 removed
+Line 45 removed
+Line 46 removed
+Line 47 removed
+Line 48 removed
+Line 49 removed
+Line 50 removed
+Line 51 removed
+Line 52 removed
+Line 53 removed
+Line 54 removed
+Line 55 removed
+Line 56 removed
+Line 57 removed
+Line 58 removed
+Line 59 removed
+Line 60 removed
+Line 61 removed
+Line 62 removed
+Line 63 removed
+Line 64 removed
+Line 65 removed
+Line 66 removed
+Line 67 removed
+Line 68 removed
+Line 69 removed
+Line 70 removed
+Line 71 removed
+Line 72 removed
+Line 73 removed
+Line 74 removed
+Line 75 removed
+Line 76 removed
+Line 77 removed
+Line 78 removed
+Line 79 removed
+Line 80 removed
+Line 81 removed
+Line 82 removed
+Line 83 removed
+Line 84 removed
+Line 85 removed
+Line 86 removed
+Line 87 removed
+Line 88 removed
+Line 89 removed
+Line 90 removed
+Line 91 removed
+Line 92 removed
+Line 93 removed
+Line 94 removed
+Line 95 removed
+Line 96 removed
+Line 97 removed
+Line 98 removed
+Line 99 removed
+Line 100 removed
+Line 101 removed
+Line 102 removed
+Line 103 removed
+Line 104 removed
+Line 105 removed
+Line 106 removed
+Line 107 removed
+Line 108 removed
+Line 109 removed
+Line 110 removed
+Line 111 removed
+Line 112 removed
+Line 113 removed
+Line 114 removed
+Line 115 removed
+Line 116 removed
+Line 117 removed
+Line 118 removed
+Line 119 removed
+Line 120 removed
+Line 121 removed
+Line 122 removed
+Line 123 removed
+Line 124 removed
+Line 125 removed
+Line 126 removed
+Line 127 removed
+Line 128 removed
+Line 129 removed
+Line 130 removed
+Line 131 removed
+Line 132 removed
+Line 133 removed
+Line 134 removed
+Line 135 removed
+Line 136 removed
+Line 137 removed
+Line 138 removed
+Line 139 removed
+Line 140 removed
+Line 141 removed
+Line 142 removed
+Line 143 removed
+Line 144 removed
+Line 145 removed
+Line 146 removed
+Line 147 removed
+Line 148 removed
+Line 149 removed
+Line 150 removed
+Line 151 removed
+Line 152 removed
+Line 153 removed
+Line 154 removed
+Line 155 removed
+Line 156 removed
+Line 157 removed
+Line 158 removed
+Line 159 removed
+Line 160 removed
+Line 161 removed
+Line 162 removed
+Line 163 removed
+Line 164 removed
+Line 165 removed
+Line 166 removed
+Line 167 removed
+Line 168 removed
+Line 169 removed
+Line 170 removed
+Line 171 removed
+Line 172 removed
+Line 173 removed
+Line 174 removed
+Line 175 removed
+Line 176 removed
+Line 177 removed
+Line 178 removed
+Line 179 removed
+Line 180 removed
+Line 181 removed
+Line 182 removed
+Line 183 removed
+Line 184 removed
+Line 185 removed
+Line 186 removed
+Line 187 removed
+Line 188 removed
+Line 189 removed
+Line 190 removed
+Line 191 removed
+Line 192 removed
+Line 193 removed
+Line 194 removed
+Line 195 removed
+Line 196 removed
+Line 197 removed
+Line 198 removed
+Line 199 removed
+Line 200 removed
+Line 201 removed
+Line 202 removed
+Line 203 removed
+Line 204 removed
+Line 205 removed
+Line 206 removed
+Line 207 removed
+Line 208 removed
+Line 209 removed
+Line 210 removed
+Line 211 removed
+Line 212 removed
+Line 213 removed
+Line 214 removed
+Line 215 removed
+Line 216 removed
+Line 217 removed
+Line 218 removed
+Line 219 removed
+Line 220 removed
+Line 221 removed
+Line 222 removed
+Line 223 removed
+Line 224 removed
+Line 225 removed
+Line 226 removed
+Line 227 removed
+Line 228 removed
+Line 229 removed
+Line 230 removed
+Line 231 removed
+Line 232 removed
+Line 233 removed
+Line 234 removed
+Line 235 removed
+Line 236 removed
+Line 237 removed
+Line 238 removed
+Line 239 removed
+Line 240 removed
+Line 241 removed
+Line 242 removed
+Line 243 removed
+Line 244 removed
+Line 245 removed
+Line 246 removed
+Line 247 removed
+Line 248 removed
+Line 249 removed
+Line 250 removed
+Line 251 removed
+Line 252 removed
+Line 253 removed
+Line 254 removed
+Line 255 removed
+Line 256 removed
+Line 257 removed
+Line 258 removed
+Line 259 removed
+Line 260 removed
+Line 261 removed
+Line 262 removed
+Line 263 removed
+Line 264 removed
+Line 265 removed
+Line 266 removed
+Line 267 removed
+Line 268 removed
+Line 269 removed
+Line 270 removed
+Line 271 removed
+Line 272 removed
+Line 273 removed
+Line 274 removed
+Line 275 removed
+Line 276 removed
+Line 277 removed
+Line 278 removed
+Line 279 removed
+Line 280 removed
+Line 281 removed
+Line 282 removed
+Line 283 removed
+Line 284 removed
+Line 285 removed
+Line 286 removed
+Line 287 removed
+Line 288 removed
+Line 289 removed
+Line 290 removed
+Line 291 removed
+Line 292 removed
+Line 293 removed
+Line 294 removed
+Line 295 removed

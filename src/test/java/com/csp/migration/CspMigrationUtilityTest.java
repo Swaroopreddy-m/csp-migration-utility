@@ -76,6 +76,20 @@ public class CspMigrationUtilityTest {
     }
 
     @Test
+    public void testInlineScriptConverterWithBodyOnload() {
+        String html = "<html><body onload=\"startGame()\"></body></html>";
+        Document doc = Jsoup.parse(html);
+        IdGenerator idGen = new IdGenerator("testbody");
+
+        String js = InlineScriptConverter.convertInlineScripts(doc, idGen, true);
+
+        assertFalse(doc.select("body").hasAttr("onload"));
+        assertTrue(js.contains("window.addEventListener(\"load\", function ()"));
+        assertTrue(js.contains("startGame()"));
+        assertFalse(js.contains("document.getElementById"));
+    }
+
+    @Test
     public void testInlineScriptConverterWithNameFallback() {
         String html = "<html><body>" +
                       "<input name=\"uniqueName\" onclick=\"validate()\">" +

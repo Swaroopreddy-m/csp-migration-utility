@@ -38,12 +38,22 @@ public class InlineScriptConverter {
                 String eventName = attr.getKey().toLowerCase().substring(2);
                 String handlerCode = attr.getValue().trim();
                 
-                js.append("document.getElementById(\"").append(id).append("\")\n");
-                js.append("        .addEventListener(\"").append(eventName).append("\", function () {\n");
-                js.append("            ").append(handlerCode).append("\n");
-                js.append("        });\n\n");
-                
-                LoggerManager.info("Inline on" + eventName + " converted for element " + id);
+                if (element.tagName().equalsIgnoreCase("body") && 
+                    (eventName.equals("load") || eventName.equals("unload") || eventName.equals("resize") || 
+                     eventName.equals("scroll") || eventName.equals("error") || eventName.equals("beforeunload"))) {
+                    js.append("window.addEventListener(\"").append(eventName).append("\", function () {\n");
+                    js.append("            ").append(handlerCode).append("\n");
+                    js.append("        });\n\n");
+                    
+                    LoggerManager.info("Inline on" + eventName + " on <body> converted for window");
+                } else {
+                    js.append("document.getElementById(\"").append(id).append("\")\n");
+                    js.append("        .addEventListener(\"").append(eventName).append("\", function () {\n");
+                    js.append("            ").append(handlerCode).append("\n");
+                    js.append("        });\n\n");
+                    
+                    LoggerManager.info("Inline on" + eventName + " converted for element " + id);
+                }
                 
                 if (removeHandlers) {
                     element.removeAttr(attr.getKey());
