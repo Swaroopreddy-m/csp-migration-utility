@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#f5f5f5;
+}
+
+h1 {
+    color:#ff4081;
+}
+
+#gameBoard {
+    width:480px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(8,60px);
+    grid-template-rows:repeat(8,60px);
+    gap:2px;
+}
+
+.candy {
+    width:60px;
+    height:60px;
+    border-radius:8px;
+    cursor:pointer;
+    border:2px solid white;
+}
+
+.panel {
+    margin:15px;
+    font-size:18px;
+}
+
+input,select {
+    padding:5px;
+}
+
+#playerName {
+    border:2px solid #ff4081;
+}
+
+#level {
+    background:#fff3cd;
+}
+
+#csp_auto_style_001 {
+    color:#4caf50;
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+#message {
+    color:#2196f3;
+    height:25px;
+}
+

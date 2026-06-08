@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f0de8d86-2efa-4b4c-be66-d37b2a2dc347" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/App$FileProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/App.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/config/AppConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/exception/ExitRequestedException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/csp/migration/exception/ExitRequestedException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/exception/SkipFileException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/csp/migration/exception/SkipFileException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/model/ConversionReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/model/ConversionState.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/model/CssBlock$Type.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/model/CssBlock.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/model/JsBlock$Type.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/model/JsBlock.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/CheckpointManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/ClassNameGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/CssGenerator$DeserializedCss.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/CssGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/DuplicateDetector$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/DuplicateDetector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/FileService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/HtmlGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/HtmlParser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/InputManager$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/InputManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/JsGenerator$DeserializedJs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/JsGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/LoggerService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/RecoveryManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/ScriptExtractor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/StyleExtractor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/UpdateManager$UpdateResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/UpdateManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/UserPrompter$Choice.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/csp/migration/service/UserPrompter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="3Eg6qres6hyg9apf9AKl4ZUROTn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.<default>.executor": "Run",
+    "JUnit.All in csp-migration-utility (1).executor": "Run",
+    "JUnit.All in csp-migration-utility.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Copy-paste",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="JUnit.All in csp-migration-utility (1)">
+    <configuration type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="$MAVEN_REPOSITORY$-ea" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="&lt;default&gt;" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in csp-migration-utility (1)" />
+        <item itemvalue="JUnit.&lt;default&gt;" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f0de8d86-2efa-4b4c-be66-d37b2a2dc347" name="Changes" comment="" />
+      <created>1780588060475</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1780588060475</updated>
+    </task>
+    <servers />
+  </component>
+</project>

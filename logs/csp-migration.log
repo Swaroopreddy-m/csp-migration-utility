@@ -1,0 +1,112 @@
+2026-06-08 11:46:33
+INFO
+ApplicationStarter.main()
+Line:15
+
+Application starting...
+
+2026-06-08 12:06:56
+INFO
+ApplicationStarter.main()
+Line:34
+
+Found 2 file(s) to process.
+
+2026-06-08 12:06:56
+INFO
+HtmlProcessor.process()
+Line:32
+
+Processing file: C:\Users\user\Documents\Projects\csp-migration-utility\test-site\candy_crush\candy_crush.html
+
+2026-06-08 12:07:11
+INFO
+InlineScriptConverter.convertInlineScripts()
+Line:46
+
+Inline onload converted for element csp_auto_c4b268a3-dfed-3931-af3b-b3f3313d1df2
+
+2026-06-08 12:07:11
+INFO
+InlineScriptConverter.convertInlineScripts()
+Line:46
+
+Inline onload converted for element csp_auto_91d3ff57-0085-3249-80ec-352809d5f483
+
+2026-06-08 12:07:11
+INFO
+InlineScriptConverter.convertInlineScripts()
+Line:46
+
+Inline onblur converted for element playerName
+
+2026-06-08 12:07:11
+INFO
+InlineScriptConverter.convertInlineScripts()
+Line:46
+
+Inline onchange converted for element level
+
+2026-06-08 12:07:11
+INFO
+InlineScriptConverter.convertInlineScripts()
+Line:46
+
+Inline onmouseover converted for element gameBoard
+
+2026-06-08 12:07:11
+INFO
+InlineScriptConverter.convertInlineScripts()
+Line:46
+
+Inline onmouseout converted for element gameBoard
+
+2026-06-08 12:07:21
+WARN
+ValidationManager.logFindings()
+Line:93
+
+Validation warning: Nashorn engine not available; skipped JS syntax check.
+
+2026-06-08 12:07:22
+INFO
+DiffReportGenerator.writeDiffReport()
+Line:21
+
+Generated diff report: candy_crush_diff.txt
+
+2026-06-08 12:07:22
+INFO
+HtmlProcessor.process()
+Line:32
+
+Processing file: C:\Users\user\Documents\Projects\csp-migration-utility\test-site\candy_crush\index.html
+
+2026-06-08 12:07:34
+INFO
+StyleExtractor.extractExternalStylesheets()
+Line:25
+
+Skipping remote stylesheet: https://fonts.googleapis.com/css?family=Montserrat:300,400&display=swap
+
+2026-06-08 12:07:52
+WARN
+ValidationManager.logFindings()
+Line:93
+
+Validation warning: Nashorn engine not available; skipped JS syntax check.
+
+2026-06-08 12:07:52
+INFO
+DiffReportGenerator.writeDiffReport()
+Line:21
+
+Generated diff report: index_diff.txt
+
+2026-06-08 12:07:52
+INFO
+ApplicationStarter.main()
+Line:52
+
+CSP Migration Process Finished.
+

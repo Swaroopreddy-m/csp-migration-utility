@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html onload="">
+<head>
+<meta charset="UTF-8">
+<title>Candy Crush Demo</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#f5f5f5;
+}
+
+h1{
+    color:#ff4081;
+}
+
+#gameBoard{
+    width:480px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(8,60px);
+    grid-template-rows:repeat(8,60px);
+    gap:2px;
+}
+
+.candy{
+    width:60px;
+    height:60px;
+    border-radius:8px;
+    cursor:pointer;
+    border:2px solid white;
+}
+
+.panel{
+    margin:15px;
+    font-size:18px;
+}
+
+input,select{
+    padding:5px;
+}
+
+</style>
+
+<script>
+
+var board = [];
+var rows = 8;
+var cols = 8;
+var score = 0;
+
+var colors = [
+    "red",
+    "blue",
+    "green",
+    "yellow",
+    "purple",
+    "orange"
+];
+
+var dragStart = null;
+
+function startGame(){
+
+    document.getElementById("playerName").value="Player1";
+
+    createBoard();
+
+    setInterval(function(){
+        crushMatches();
+    },300);
+}
+
+function createBoard(){
+
+    let gameBoard = document.getElementById("gameBoard");
+
+    gameBoard.innerHTML="";
+
+    board=[];
+
+    for(let r=0;r<rows;r++){
+
+        board[r]=[];
+
+        for(let c=0;c<cols;c++){
+
+            let color = randomColor();
+
+            board[r][c]=color;
+
+            let candy = document.createElement("div");
+
+            candy.className="candy";
+            candy.id=r+"-"+c;
+            candy.draggable=true;
+            candy.style.background=color;
+
+            candy.addEventListener("dragstart",dragStartFn);
+            candy.addEventListener("dragover",dragOverFn);
+            candy.addEventListener("drop",dropFn);
+
+            gameBoard.appendChild(candy);
+        }
+    }
+}
+
+function randomColor(){
+    return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function dragStartFn(){
+    dragStart=this;
+}
+
+function dragOverFn(e){
+    e.preventDefault();
+}
+
+function dropFn(){
+
+    if(!dragStart || dragStart===this){
+        return;
+    }
+
+    let color1 = dragStart.style.background;
+    let color2 = this.style.background;
+
+    dragStart.style.background=color2;
+    this.style.background=color1;
+}
+
+function crushMatches(){
+
+    let candies=document.querySelectorAll(".candy");
+
+    for(let r=0;r<rows;r++){
+
+        for(let c=0;c<cols-2;c++){
+
+            let idx1=r*cols+c;
+            let idx2=r*cols+c+1;
+            let idx3=r*cols+c+2;
+
+            let color1=candies[idx1].style.background;
+
+            if(
+                color1!=="" &&
+                color1===candies[idx2].style.background &&
+                color1===candies[idx3].style.background
+            ){
+
+                candies[idx1].style.background="";
+                candies[idx2].style.background="";
+                candies[idx3].style.background="";
+
+                increaseScore(30);
+            }
+        }
+    }
+
+    for(let c=0;c<cols;c++){
+
+        for(let r=0;r<rows-2;r++){
+
+            let idx1=r*cols+c;
+            let idx2=(r+1)*cols+c;
+            let idx3=(r+2)*cols+c;
+
+            let color1=candies[idx1].style.background;
+
+            if(
+                color1!=="" &&
+                color1===candies[idx2].style.background &&
+                color1===candies[idx3].style.background
+            ){
+
+                candies[idx1].style.background="";
+                candies[idx2].style.background="";
+                candies[idx3].style.background="";
+
+                increaseScore(30);
+            }
+        }
+    }
+
+    refillBoard();
+}
+
+function refillBoard(){
+
+    let candies=document.querySelectorAll(".candy");
+
+    candies.forEach(function(candy){
+
+        if(candy.style.background===""){
+
+            candy.style.background=randomColor();
+        }
+    });
+}
+
+function increaseScore(points){
+
+    score += points;
+
+    document.getElementById("score").innerHTML=score;
+}
+
+function playerBlur(){
+
+    let name=document.getElementById("playerName").value;
+
+    if(name.trim()===""){
+
+        alert("Player name cannot be empty");
+    }
+}
+
+function levelChanged(){
+
+    let level=document.getElementById("level").value;
+
+    alert("Level changed to "+level);
+}
+
+function hoverMessage(){
+
+    document.getElementById("message").innerHTML=
+        "Swap candies to make 3 matches!";
+}
+
+function clearMessage(){
+
+    document.getElementById("message").innerHTML="";
+}
+
+</script>
+
+</head>
+
+<body onload="startGame()">
+
+<h1>Candy Crush Demo</h1>
+
+<div class="panel">
+
+Player Name:
+
+<input
+type="text"
+id="playerName"
+onblur="playerBlur()"
+style="border:2px solid #ff4081;"
+>
+
+Level:
+
+<select
+id="level"
+onchange="levelChanged()"
+style="background:#fff3cd;"
+>
+<option>Easy</option>
+<option>Medium</option>
+<option>Hard</option>
+</select>
+
+</div>
+
+<div
+style="
+font-size:24px;
+font-weight:bold;
+margin-bottom:10px;
+color:#4caf50;
+">
+Score: <span id="score">0</span>
+</div>
+
+<div
+id="message"
+style="height:25px;color:#2196f3;">
+</div>
+
+<div
+id="gameBoard"
+onmouseover="hoverMessage()"
+onmouseout="clearMessage()">
+</div>
+
+</body>
+</html>
